@@ -71,6 +71,10 @@
     const addButton = document.getElementById("add-button");
     const list = document.getElementById("list");
 
+    function currentDateComment() {
+      let currentDate = new Date();
+    }
+
     addButton.addEventListener("click", () => {
       const oldHtml = list.innerHTML;
       list.innerHTML =
@@ -80,7 +84,7 @@
             <div>
               ${inputName.value}
             </div>
-            <div>13.02.22 19:22</div>
+            <div> ${currentDate} </div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
