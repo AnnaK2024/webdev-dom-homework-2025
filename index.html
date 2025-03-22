@@ -7,6 +7,11 @@
   </head>
 
   <body>
+    <style>
+      .error {
+        background-color: yellow;
+      }
+    </style>
     <div class="container">
       <ul id="list" class="comments">
         <li class="comment">
@@ -67,15 +72,34 @@
 
   <script>
     const inputName = document.getElementById("name");
-    const textComment = document.getElementById("comment");
+    const inputTextComment = document.getElementById("comment");
     const addButton = document.getElementById("add-button");
     const list = document.getElementById("list");
 
-    function currentDateComment() {
-      let currentDate = new Date();
-    }
+    let myDate = new Date();
+    let currentDate =
+      myDate.getDate().toString().padStart(2, "0") +
+      "." +
+      (myDate.getMonth() + 1).toString().padStart(2, "0") +
+      "." +
+      myDate.getFullYear().toString().substr(2, 2) +
+      " " +
+      myDate.getHours().toString().padStart(2, "0") +
+      ":" +
+      myDate.getMinutes().toString().padStart(2, "0");
 
     addButton.addEventListener("click", () => {
+      inputName.classList.remove("error");
+      if (inputName.value === "") {
+        inputName.classList.add("error");
+        return;
+      }
+      inputTextComment.classList.remove("error");
+      if (inputTextComment.value === "") {
+        inputTextComment.classList.add("error");
+        return;
+      }
+
       const oldHtml = list.innerHTML;
       list.innerHTML =
         oldHtml +
@@ -88,7 +112,7 @@
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${textComment.value}
+              ${inputTextComment.value}
             </div>
           </div>
           <div class="comment-footer">
@@ -98,6 +122,9 @@
             </div>
           </div>
         </li>`;
+
+      inputName.value = "";
+      inputTextComment.value = "";
     });
   </script>
 </html>
