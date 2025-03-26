@@ -14,7 +14,7 @@
     </style>
     <div class="container">
       <ul id="list" class="comments">
-        <li class="comment">
+        <!-- <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
             <div>12.02.22 12:18</div>
@@ -47,7 +47,7 @@
               <button class="like-button -active-like"></button>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
       <div class="add-form">
         <input
@@ -71,57 +71,108 @@
   </body>
 
   <script>
+    "use strict";
+
     const inputName = document.getElementById("name");
     const inputTextComment = document.getElementById("comment");
     const addButton = document.getElementById("add-button");
     const list = document.getElementById("list");
 
-    let myDate = new Date();
-    let currentDate =
-      myDate.getDate().toString().padStart(2, "0") +
-      "." +
-      (myDate.getMonth() + 1).toString().padStart(2, "0") +
-      "." +
-      myDate.getFullYear().toString().substr(2, 2) +
-      " " +
-      myDate.getHours().toString().padStart(2, "0") +
-      ":" +
-      myDate.getMinutes().toString().padStart(2, "0");
+    //Массив комментариев
+    const listСomments = [
+      {
+        name: "Глеб Фокин",
+        data: "12.02.22 12:18",
+        comment: "Это будет первый комментарий на этой странице",
+        likes: "3",
+        isLiked: false,
+      },
+      {
+        name: "Варвара Н.",
+        data: "13.02.22 19:22",
+        comment: "Мне нравится как оформлена эта страница! ❤",
+        likes: "75",
+        isLiked: false,
+      },
+    ];
 
-    addButton.addEventListener("click", () => {
-      inputName.classList.remove("error");
-      if (inputName.value === "") {
-        inputName.classList.add("error");
-        return;
+    //Обработчик лайка
+    const initClickLike = () => {
+      const likesButton = document.querySelectorAll(".like-button");
+      for (const buttonLike of likesButton) {
+        buttonLike.addEventListener("click", () => {
+          console.log("click");
+        });
       }
-      inputTextComment.classList.remove("error");
-      if (inputTextComment.value === "") {
-        inputTextComment.classList.add("error");
-        return;
-      }
+    };
 
-      const oldHtml = list.innerHTML;
-      list.innerHTML =
-        oldHtml +
-        `<li class="comment">
+    // Функция рендеринга массива
+    const renderListСomments = () => {
+      const listСommentsHtml = listСomments
+        .map((commentator) => {
+          return `<li class="comment">
           <div class="comment-header">
-            <div>
-              ${inputName.value}
-            </div>
-            <div> ${currentDate} </div>
+            <div>${commentator.name}</div>
+            <div>${commentator.data}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${inputTextComment.value}
+              ${commentator.comment}
             </div>
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button -active-like"></button>
+              <span class="likes-counter">${commentator.likes}</span>
+              <button class="like-button ${
+                commentator.isLiked ? "-active-like" : ""
+              }" ></button>
             </div>
           </div>
         </li>`;
+        })
+        .join("");
+
+      list.innerHTML = listСommentsHtml;
+
+      initClickLike();
+    };
+    renderListСomments();
+
+    //Добавляем новый комменатирй
+    addButton.addEventListener("click", () => {
+      let myDate = new Date();
+      let currentDate =
+        myDate.getDate().toString().padStart(2, "0") +
+        "." +
+        (myDate.getMonth() + 1).toString().padStart(2, "0") +
+        "." +
+        myDate.getFullYear().toString().substr(2, 2) +
+        " " +
+        myDate.getHours().toString().padStart(2, "0") +
+        ":" +
+        myDate.getMinutes().toString().padStart(2, "0");
+
+      inputName.classList.remove("error");
+      if (inputName.value.trim() === "") {
+        inputName.classList.add("error");
+        return;
+      }
+      inputTextComment.classList.remove("error");
+      if (inputTextComment.value.trim() === "") {
+        inputTextComment.classList.add("error");
+        return;
+      }
+
+      const newComments = {
+        name: inputName.value,
+        data: currentDate,
+        comment: inputTextComment.value,
+        likes: 0,
+        isLiked: false,
+      };
+
+      listСomments.push(newComments);
+      renderListСomments();
 
       inputName.value = "";
       inputTextComment.value = "";
@@ -139,7 +190,15 @@
     //   }
     // });
 
-    
+    // function getCurrentDateTime() {
+    //   let currentDate = new Date();
+    //   let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
+    //   let optionsTime = { hour: "2-digit", minute: "2-digit" };
 
+    //   let formattedDate = currentDate.toLocaleDateString("ru-RU", optionsDate);
+    //   let formattedTime = currentDate.toLocaleTimeString("ru-RU", optionsTime);
+
+    //   return `${formattedDate} ${formattedTime}`;
+    // }
   </script>
 </html>
