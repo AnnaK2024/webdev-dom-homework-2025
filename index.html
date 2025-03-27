@@ -66,6 +66,11 @@
         <div class="add-form-row">
           <button id="add-button" class="add-form-button">Написать</button>
         </div>
+        <div class="add-form-row">
+          <button id="delete-button" class="delete-form-button">
+            Удалить последний коментарий
+          </button>
+        </div>
       </div>
     </div>
   </body>
@@ -84,48 +89,38 @@
         name: "Глеб Фокин",
         data: "12.02.22 12:18",
         comment: "Это будет первый комментарий на этой странице",
-        likes: "3",
+        likes: 3,
         isLiked: false,
       },
       {
         name: "Варвара Н.",
         data: "13.02.22 19:22",
         comment: "Мне нравится как оформлена эта страница! ❤",
-        likes: "75",
+        likes: 75,
         isLiked: false,
       },
     ];
 
-    //Обработчик лайка
-    const initClickLike = () => {
-      const likesButton = document.querySelectorAll(".like-button");
-      for (const buttonLike of likesButton) {
-        buttonLike.addEventListener("click", () => {
-          console.log("click");
-        });
-      }
-    };
-
     // Функция рендеринга массива
     const renderListСomments = () => {
       const listСommentsHtml = listСomments
-        .map((commentator) => {
+        .map((comment, index) => {
           return `<li class="comment">
           <div class="comment-header">
-            <div>${commentator.name}</div>
-            <div>${commentator.data}</div>
+            <div>${comment.name}</div>
+            <div>${comment.data}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${commentator.comment}
+              ${comment.comment}
             </div>
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">${commentator.likes}</span>
+              <span class="likes-counter">${comment.likes}</span>
               <button class="like-button ${
-                commentator.isLiked ? "-active-like" : ""
-              }" ></button>
+                comment.isLiked ? "-active-like" : ""
+              }" data-indexLike="${index}"></button>
             </div>
           </div>
         </li>`;
@@ -133,24 +128,46 @@
         .join("");
 
       list.innerHTML = listСommentsHtml;
-
-      initClickLike();
     };
     renderListСomments();
+    
+    
+
+    //Обработчик лайка
+    const initClickLike = () => {
+      const buttonLikes = document.querySelectorAll(".like-button");
+      for (const buttonLike of buttonLikes) {
+        buttonLike.addEventListener("click", (event) => {
+          const likeIndex = buttonLike.dataset.indexLike; // считываем значение дата-атрибута кнопки
+          const comment = listСomments[likeIndex]; // перебираем индексы комментариев из списка
+          comment.likes += comment.isLiked ? 1 : -1; // количество лайков
+          comment.isLiked = !comment.isLiked; // цвет лайка
+
+          renderListСomments();
+        });
+      }
+    };
+
+    initClickLike();
+
+    // //Удалить последний комментарий
+    // const deleteLastComment = () => {
+    //   const deleteButton = document.querySelectorAll(".add-form-row");
+    //   for (const buttonDelete of deleteButton) {
+    //     buttonDelete.addEventListener("click", (event) => {
+    //       event.stopPropagation();
+    //     });
+    //   }
+    // };
 
     //Добавляем новый комменатирй
     addButton.addEventListener("click", () => {
-      let myDate = new Date();
-      let currentDate =
-        myDate.getDate().toString().padStart(2, "0") +
-        "." +
-        (myDate.getMonth() + 1).toString().padStart(2, "0") +
-        "." +
-        myDate.getFullYear().toString().substr(2, 2) +
-        " " +
-        myDate.getHours().toString().padStart(2, "0") +
-        ":" +
-        myDate.getMinutes().toString().padStart(2, "0");
+      //текущее время
+      let currentDate = new Date();
+      let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
+      let optionsTime = { hour: "2-digit", minute: "2-digit" };
+      let formattedDate = currentDate.toLocaleDateString("ru-RU", optionsDate);
+      let formattedTime = currentDate.toLocaleTimeString("ru-RU", optionsTime);
 
       inputName.classList.remove("error");
       if (inputName.value.trim() === "") {
@@ -165,7 +182,7 @@
 
       const newComments = {
         name: inputName.value,
-        data: currentDate,
+        data: `${formattedDate} ${formattedTime}`,
         comment: inputTextComment.value,
         likes: 0,
         isLiked: false,
@@ -173,6 +190,7 @@
 
       listСomments.push(newComments);
       renderListСomments();
+      initClickLike();
 
       inputName.value = "";
       inputTextComment.value = "";
@@ -189,16 +207,5 @@
     //     event.preventDefault();
     //   }
     // });
-
-    // function getCurrentDateTime() {
-    //   let currentDate = new Date();
-    //   let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
-    //   let optionsTime = { hour: "2-digit", minute: "2-digit" };
-
-    //   let formattedDate = currentDate.toLocaleDateString("ru-RU", optionsDate);
-    //   let formattedTime = currentDate.toLocaleTimeString("ru-RU", optionsTime);
-
-    //   return `${formattedDate} ${formattedTime}`;
-    // }
   </script>
 </html>
