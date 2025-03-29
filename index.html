@@ -97,9 +97,24 @@
         data: "13.02.22 19:22",
         comment: "Мне нравится как оформлена эта страница! ❤",
         likes: 75,
-        isLiked: false,
+        isLiked: true,
       },
     ];
+
+    //Обработчик лайка
+    const initClickLike = () => {
+      const buttonLikes = document.querySelectorAll('.like-button');
+      for (const buttonLike of buttonLikes) {
+        buttonLike.addEventListener("click", () => {
+          const likeIndex = buttonLike.dataset.indexLike; // считываем значение дата-атрибута кнопки
+          const likeComment = listСomments[likeIndex]; // перебираем индексы комментариев из списка
+          likeComment.isLiked = !likeComment.isLiked; // цвет лайка
+          likeComment.likes += likeComment.isLiked ? 1 : -1; // количество лайков
+          
+          renderListСomments();
+        });
+      }
+    };
 
     // Функция рендеринга массива
     const renderListСomments = () => {
@@ -120,7 +135,7 @@
               <span class="likes-counter">${comment.likes}</span>
               <button class="like-button ${
                 comment.isLiked ? "-active-like" : ""
-              }" data-indexLike="${index}"></button>
+              }" data-index-like="${index}"></button>
             </div>
           </div>
         </li>`;
@@ -128,27 +143,10 @@
         .join("");
 
       list.innerHTML = listСommentsHtml;
+
+      initClickLike();
     };
     renderListСomments();
-    
-    
-
-    //Обработчик лайка
-    const initClickLike = () => {
-      const buttonLikes = document.querySelectorAll(".like-button");
-      for (const buttonLike of buttonLikes) {
-        buttonLike.addEventListener("click", (event) => {
-          const likeIndex = buttonLike.dataset.indexLike; // считываем значение дата-атрибута кнопки
-          const comment = listСomments[likeIndex]; // перебираем индексы комментариев из списка
-          comment.likes += comment.isLiked ? 1 : -1; // количество лайков
-          comment.isLiked = !comment.isLiked; // цвет лайка
-
-          renderListСomments();
-        });
-      }
-    };
-
-    initClickLike();
 
     // //Удалить последний комментарий
     // const deleteLastComment = () => {
@@ -190,7 +188,7 @@
 
       listСomments.push(newComments);
       renderListСomments();
-      initClickLike();
+      // initClickLike();
 
       inputName.value = "";
       inputTextComment.value = "";
