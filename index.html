@@ -102,6 +102,21 @@
       },
     ];
 
+    // Обработчик клика на комментарий
+    const initClickComment = () => {
+      const comments = document.querySelectorAll(".comment");
+      comments.forEach((comment, index) => {
+        comment.addEventListener("click", () => {
+          const selectedComment = listСomments[index];
+          console.log(selectedComment);
+          inputName.value = selectedComment.name;
+          inputTextComment.value = `Ответ на: "${selectedComment.comment}" `;
+
+          renderListСomments();
+        });
+      });
+    };
+
     //Обработчик лайка
     const initClickLike = () => {
       const buttonLikes = document.querySelectorAll(".like-button");
@@ -120,32 +135,33 @@
     // Функция рендеринга массива
     const renderListСomments = () => {
       const listСommentsHtml = listСomments
-        .map((comment, index) => {
+        .map((comments, index) => {
           return `<li class="comment">
-          <div class="comment-header">
-            <div>${comment.name}</div>
-            <div>${comment.data}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${comment.comment}
+            <div class="comment-header">
+              <div>${comments.name}</div>
+              <div>${comments.data}</div>
             </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">${comment.likes}</span>
-              <button class="like-button ${
-                comment.isLiked ? "-active-like" : ""
-              }" data-index-like="${index}"></button>
+            <div class="comment-body">
+              <div class="comment-text">
+                ${comments.comment}
+              </div>
             </div>
-          </div>
-        </li>`;
+            <div class="comment-footer">
+              <div class="likes">
+                <span class="likes-counter">${comments.likes}</span>
+                <button class="like-button ${
+                  comments.isLiked ? "-active-like" : ""
+                }" data-index-like="${index}"></button>
+              </div>
+            </div>
+          </li>`;
         })
         .join("");
 
       list.innerHTML = listСommentsHtml;
 
       initClickLike();
+      initClickComment();
     };
     renderListСomments();
 
@@ -169,9 +185,11 @@
       }
 
       const newComments = {
-        name: inputName.value.replaceAll("<","&lt;").replaceAll(">","&gt;"),
+        name: inputName.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
         data: `${formattedDate} ${formattedTime}`,
-        comment: inputTextComment.value.replaceAll("<","&lt;").replaceAll(">","&gt;"),
+        comment: inputTextComment.value
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;"),
         likes: 0,
         isLiked: false,
       };
@@ -183,26 +201,15 @@
       inputTextComment.value = "";
     });
 
-    // Удалить последний комментарий
     deleteButton.addEventListener("click", () => {
-      if (listСomments.length >= 0) {
-        listСomments.pop(); // Удаляем последний комментарий
-        renderListСomments();
-      } else {
+      if (listСomments.length === 0) {
         alert("Нет комментариев для удаления!");
+        return;
       }
+
+      const indexToDelete = listСomments.length - 1; // Индекс последнего комментария
+      listСomments.splice(indexToDelete, 1); // Удаляем комментарий по индексу
+      renderListСomments(); // Обновляем отображение комментариев
     });
-
-    // inputName.addEventListener("keydown", function (event) {
-    //   if (event.key === "Enter") {
-    //     event.preventDefault();
-    //   }
-    // });
-
-    // inputTextComment.addEventListener("keydown", function (event) {
-    //   if (event.key === "Enter") {
-    //     event.preventDefault();
-    //   }
-    // });
   </script>
 </html>
