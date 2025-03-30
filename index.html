@@ -13,42 +13,7 @@
       }
     </style>
     <div class="container">
-      <ul id="list" class="comments">
-        <!-- <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li> -->
-      </ul>
+      <ul id="list" class="comments"></ul>
       <div class="add-form">
         <input
           id="name"
@@ -81,8 +46,22 @@
     const inputName = document.getElementById("name");
     const inputTextComment = document.getElementById("comment");
     const addButton = document.getElementById("add-button");
-    const deleteButton = document.getElementById("delete-button");
+
     const list = document.getElementById("list");
+
+    const formatDate = () => {
+      let currentDate = new Date();
+      let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
+      let optionsTime = { hour: "2-digit", minute: "2-digit" };
+      let formattedDate = currentDate.toLocaleDateString("ru-RU", optionsDate);
+      let formattedTime = currentDate.toLocaleTimeString("ru-RU", optionsTime);
+
+      return `${formattedDate} ${formattedTime}`;
+    };
+
+    const sanitizeHtml = (value) => {
+      return value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    };
 
     //Массив комментариев
     const listСomments = [
@@ -102,26 +81,25 @@
       },
     ];
 
-    // Обработчик клика на комментарий
+    // Ответ на комментарий
     const initClickComment = () => {
-      const comments = document.querySelectorAll(".comment-text");
-      comments.forEach((comment, index) => {
-        comment.addEventListener("click", () => {
-          const selectedComment = listСomments[index];
-          console.log(selectedComment);
-          inputName.value = selectedComment.name;
-          inputTextComment.value = `Ответ на: "${selectedComment.comment}" `;
+      const commentsElements = document.querySelectorAll(".comment");
+      for (const commentElement of commentsElements) {
+        commentElement.addEventListener("click", () => {
+          const currentComment = listСomments[commentElement.dataset.index];
+          inputTextComment.value = `${currentComment.name} : ${currentComment.comment}`;
 
           renderListСomments();
         });
-      });
+      }
     };
 
     //Обработчик лайка
     const initClickLike = () => {
       const buttonLikes = document.querySelectorAll(".like-button");
       for (const buttonLike of buttonLikes) {
-        buttonLike.addEventListener("click", () => {
+        buttonLike.addEventListener("click", (event) => {
+          event.stopImmediatePropagation();
           const likeIndex = buttonLike.dataset.indexLike; // считываем значение дата-атрибута кнопки
           const likeComment = listСomments[likeIndex]; // перебираем индексы комментариев из списка
           likeComment.isLiked = !likeComment.isLiked; // цвет лайка
@@ -136,7 +114,7 @@
     const renderListСomments = () => {
       const listСommentsHtml = listСomments
         .map((comments, index) => {
-          return `<li class="comment">
+          return `<li class="comment" data-index="${index}">
             <div class="comment-header">
               <div>${comments.name}</div>
               <div>${comments.data}</div>
@@ -167,12 +145,6 @@
 
     //Добавляем новый комменатирй
     addButton.addEventListener("click", () => {
-      let currentDate = new Date();
-      let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
-      let optionsTime = { hour: "2-digit", minute: "2-digit" };
-      let formattedDate = currentDate.toLocaleDateString("ru-RU", optionsDate);
-      let formattedTime = currentDate.toLocaleTimeString("ru-RU", optionsTime);
-
       inputName.classList.remove("error");
       if (inputName.value.trim() === "") {
         inputName.classList.add("error");
@@ -185,11 +157,9 @@
       }
 
       const newComments = {
-        name: inputName.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-        data: `${formattedDate} ${formattedTime}`,
-        comment: inputTextComment.value
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;"),
+        name: sanitizeHtml(inputName.value),
+        data: formatDate(),
+        comment: sanitizeHtml(inputTextComment.value),
         likes: 0,
         isLiked: false,
       };
@@ -201,15 +171,30 @@
       inputTextComment.value = "";
     });
 
-    deleteButton.addEventListener("click", () => {
-      if (listСomments.length === 0) {
-        alert("Нет комментариев для удаления!");
-        return;
-      }
+    const deleteLastComments = () => {
+      const deleteButton = document.getElementById("delete-button");
 
-      const indexToDelete = listСomments.length - 1; // Индекс последнего комментария
-      listСomments.splice(indexToDelete, 1); // Удаляем комментарий по индексу
-      renderListСomments(); // Обновляем отображение комментариев
-    });
+      deleteButton.addEventListener("click", () => {
+        if (listСomments.length === 0) {
+          alert("Нет комментариев для удаления!");
+          return;
+        }
+        const indexToDelete = listСomments.length - 1; // Индекс последнего комментария
+        listСomments.splice(indexToDelete, 1); // Удаляем комментарий по индексу
+        renderListСomments(); // Обновляем отображение комментариев
+      });
+    };
+    deleteLastComments();
+
+    // ввод комментария по нажатию на клавишу Enter
+    const enteringTextPressingKey = () => {
+      inputTextComment.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault(); // Предотвращаем переход на новую строку
+          addButton.click(); // Имитация клика по кнопке "Написать"
+        }
+      });
+    };
+    enteringTextPressingKey();
   </script>
 </html>

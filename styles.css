@@ -141,10 +141,11 @@ body {
   margin-top: 24px;
   font-size: 16px;
   padding: 10px 20px;
-  background-color: #bcec30;
+  background-color: #d9bce02d;
   border: none;
   border-radius: 18px;
   cursor: pointer;
+  color: #ffffff;
 }
 
 .delete-form-button:hover {
