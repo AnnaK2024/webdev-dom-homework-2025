@@ -81,6 +81,7 @@
     const inputName = document.getElementById("name");
     const inputTextComment = document.getElementById("comment");
     const addButton = document.getElementById("add-button");
+    const deleteButton = document.getElementById("delete-button");
     const list = document.getElementById("list");
 
     //Массив комментариев
@@ -103,14 +104,14 @@
 
     //Обработчик лайка
     const initClickLike = () => {
-      const buttonLikes = document.querySelectorAll('.like-button');
+      const buttonLikes = document.querySelectorAll(".like-button");
       for (const buttonLike of buttonLikes) {
         buttonLike.addEventListener("click", () => {
           const likeIndex = buttonLike.dataset.indexLike; // считываем значение дата-атрибута кнопки
           const likeComment = listСomments[likeIndex]; // перебираем индексы комментариев из списка
           likeComment.isLiked = !likeComment.isLiked; // цвет лайка
           likeComment.likes += likeComment.isLiked ? 1 : -1; // количество лайков
-          
+
           renderListСomments();
         });
       }
@@ -148,19 +149,8 @@
     };
     renderListСomments();
 
-    // //Удалить последний комментарий
-    // const deleteLastComment = () => {
-    //   const deleteButton = document.querySelectorAll(".add-form-row");
-    //   for (const buttonDelete of deleteButton) {
-    //     buttonDelete.addEventListener("click", (event) => {
-    //       event.stopPropagation();
-    //     });
-    //   }
-    // };
-
     //Добавляем новый комменатирй
     addButton.addEventListener("click", () => {
-      //текущее время
       let currentDate = new Date();
       let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
       let optionsTime = { hour: "2-digit", minute: "2-digit" };
@@ -188,10 +178,19 @@
 
       listСomments.push(newComments);
       renderListСomments();
-      // initClickLike();
 
       inputName.value = "";
       inputTextComment.value = "";
+    });
+
+    // Удалить последний комментарий
+    deleteButton.addEventListener("click", () => {
+      if (listСomments.length >= 0) {
+        listСomments.pop(); // Удаляем последний комментарий
+        renderListСomments();
+      } else {
+        alert("Нет комментариев для удаления!");
+      }
     });
 
     // inputName.addEventListener("keydown", function (event) {
