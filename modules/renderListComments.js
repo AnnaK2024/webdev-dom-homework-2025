@@ -1,12 +1,12 @@
-import { listСomments } from "./listComments.js";
-import { initClickLike, initClickComment } from "./initlisteners.js";
+import { listСomments } from './listComments.js'
+import { initClickLike, initClickComment } from './initlisteners.js'
 
 // Функция рендеринга массива
 export const renderListСomments = () => {
-  const list = document.getElementById("list");
-  const listСommentsHtml = listСomments
-    .map((comments, index) => {
-      return `<li class="comment" data-index="${index}">
+    const list = document.getElementById('list')
+    const listСommentsHtml = listСomments
+        .map((comments, index) => {
+            return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comments.name}</div>
             <div>${comments.data}</div>
@@ -20,16 +20,16 @@ export const renderListСomments = () => {
             <div class="likes">
               <span class="likes-counter">${comments.likes}</span>
               <button class="like-button ${
-                comments.isLiked ? "-active-like" : ""
+                  comments.isLiked ? '-active-like' : ''
               }" data-index-like="${index}"></button>
             </div>
           </div>
-        </li>`;
-    })
-    .join("");
+        </li>`
+        })
+        .join('')
 
-  list.innerHTML = listСommentsHtml;
+    list.innerHTML = listСommentsHtml
 
-  initClickLike();
-  initClickComment();
-};
+    initClickLike()
+    initClickComment()
+}

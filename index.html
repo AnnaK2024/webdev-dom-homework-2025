@@ -1,45 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    <head>
+        <title>Проект "Комменты"</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
 
-  <body>
-    <style>
-      .error {
-        background-color: yellow;
-      }
-    </style>
-    <div class="container">
-      <ul id="list" class="comments"></ul>
-      <div class="add-form">
-        <input
-          id="name"
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-        />
-        <textarea
-          id="comment"
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-        ></textarea>
-        <div class="add-form-row">
-          <button id="add-button" class="add-form-button">Написать</button>
+    <body>
+        <style>
+            .error {
+                background-color: yellow;
+            }
+        </style>
+        <div class="container">
+            <ul id="list" class="comments"></ul>
+            <div class="add-form">
+                <input
+                    id="name"
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                />
+                <textarea
+                    id="comment"
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                ></textarea>
+                <div class="add-form-row">
+                    <button id="add-button" class="add-form-button">
+                        Написать
+                    </button>
+                </div>
+                <div class="add-form-row">
+                    <button id="delete-button" class="delete-form-button">
+                        Удалить последний коментарий
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="add-form-row">
-          <button id="delete-button" class="delete-form-button">
-            Удалить последний коментарий
-          </button>
-        </div>
-      </div>
-    </div>
-  </body>
-    
-  <script type="module" src="./index.js">
-  </script>
+    </body>
+
+    <script type="module" src="./index.js"></script>
 </html>
