@@ -1,215 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    <head>
+        <title>Проект "Комменты"</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
 
-  <body>
-    <style>
-      .error {
-        background-color: yellow;
-      }
-    </style>
-    <div class="container">
-      <ul id="list" class="comments">
-        <!-- <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
+    <body>
+        <style>
+            .error {
+                background-color: yellow;
+            }
+        </style>
+        <div class="container">
+            <ul id="list" class="comments"></ul>
+            <div class="add-form">
+                <input
+                    id="name"
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                />
+                <textarea
+                    id="comment"
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                ></textarea>
+                <div class="add-form-row">
+                    <button id="add-button" class="add-form-button">
+                        Написать
+                    </button>
+                </div>
+                <div class="add-form-row">
+                    <button id="delete-button" class="delete-form-button">
+                        Удалить последний коментарий
+                    </button>
+                </div>
             </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li> -->
-      </ul>
-      <div class="add-form">
-        <input
-          id="name"
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-        />
-        <textarea
-          id="comment"
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-        ></textarea>
-        <div class="add-form-row">
-          <button id="add-button" class="add-form-button">Написать</button>
         </div>
-        <div class="add-form-row">
-          <button id="delete-button" class="delete-form-button">
-            Удалить последний коментарий
-          </button>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 
-  <script>
-    "use strict";
-
-    const inputName = document.getElementById("name");
-    const inputTextComment = document.getElementById("comment");
-    const addButton = document.getElementById("add-button");
-    const deleteButton = document.getElementById("delete-button");
-    const list = document.getElementById("list");
-
-    //Массив комментариев
-    const listСomments = [
-      {
-        name: "Глеб Фокин",
-        data: "12.02.22 12:18",
-        comment: "Это будет первый комментарий на этой странице",
-        likes: 3,
-        isLiked: false,
-      },
-      {
-        name: "Варвара Н.",
-        data: "13.02.22 19:22",
-        comment: "Мне нравится как оформлена эта страница! ❤",
-        likes: 75,
-        isLiked: true,
-      },
-    ];
-
-    // Обработчик клика на комментарий
-    const initClickComment = () => {
-      const comments = document.querySelectorAll(".comment-text");
-      comments.forEach((comment, index) => {
-        comment.addEventListener("click", () => {
-          const selectedComment = listСomments[index];
-          console.log(selectedComment);
-          inputName.value = selectedComment.name;
-          inputTextComment.value = `Ответ на: "${selectedComment.comment}" `;
-
-          renderListСomments();
-        });
-      });
-    };
-
-    //Обработчик лайка
-    const initClickLike = () => {
-      const buttonLikes = document.querySelectorAll(".like-button");
-      for (const buttonLike of buttonLikes) {
-        buttonLike.addEventListener("click", () => {
-          const likeIndex = buttonLike.dataset.indexLike; // считываем значение дата-атрибута кнопки
-          const likeComment = listСomments[likeIndex]; // перебираем индексы комментариев из списка
-          likeComment.isLiked = !likeComment.isLiked; // цвет лайка
-          likeComment.likes += likeComment.isLiked ? 1 : -1; // количество лайков
-
-          renderListСomments();
-        });
-      }
-    };
-
-    // Функция рендеринга массива
-    const renderListСomments = () => {
-      const listСommentsHtml = listСomments
-        .map((comments, index) => {
-          return `<li class="comment">
-            <div class="comment-header">
-              <div>${comments.name}</div>
-              <div>${comments.data}</div>
-            </div>
-            <div class="comment-body">
-              <div class="comment-text">
-                ${comments.comment}
-              </div>
-            </div>
-            <div class="comment-footer">
-              <div class="likes">
-                <span class="likes-counter">${comments.likes}</span>
-                <button class="like-button ${
-                  comments.isLiked ? "-active-like" : ""
-                }" data-index-like="${index}"></button>
-              </div>
-            </div>
-          </li>`;
-        })
-        .join("");
-
-      list.innerHTML = listСommentsHtml;
-
-      initClickLike();
-      initClickComment();
-    };
-    renderListСomments();
-
-    //Добавляем новый комменатирй
-    addButton.addEventListener("click", () => {
-      let currentDate = new Date();
-      let optionsDate = { day: "numeric", month: "2-digit", year: "2-digit" };
-      let optionsTime = { hour: "2-digit", minute: "2-digit" };
-      let formattedDate = currentDate.toLocaleDateString("ru-RU", optionsDate);
-      let formattedTime = currentDate.toLocaleTimeString("ru-RU", optionsTime);
-
-      inputName.classList.remove("error");
-      if (inputName.value.trim() === "") {
-        inputName.classList.add("error");
-        return;
-      }
-      inputTextComment.classList.remove("error");
-      if (inputTextComment.value.trim() === "") {
-        inputTextComment.classList.add("error");
-        return;
-      }
-
-      const newComments = {
-        name: inputName.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-        data: `${formattedDate} ${formattedTime}`,
-        comment: inputTextComment.value
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;"),
-        likes: 0,
-        isLiked: false,
-      };
-
-      listСomments.push(newComments);
-      renderListСomments();
-
-      inputName.value = "";
-      inputTextComment.value = "";
-    });
-
-    deleteButton.addEventListener("click", () => {
-      if (listСomments.length === 0) {
-        alert("Нет комментариев для удаления!");
-        return;
-      }
-
-      const indexToDelete = listСomments.length - 1; // Индекс последнего комментария
-      listСomments.splice(indexToDelete, 1); // Удаляем комментарий по индексу
-      renderListСomments(); // Обновляем отображение комментариев
-    });
-  </script>
+    <script type="module" src="./index.js"></script>
 </html>
