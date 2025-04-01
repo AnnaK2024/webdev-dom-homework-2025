@@ -1,8 +1,7 @@
-import { listСomments } from './listComments.js'
 import { initClickLike, initClickComment } from './initlisteners.js'
 
 // Функция рендеринга массива
-export const renderListСomments = () => {
+export const renderListСomments = (listСomments) => {
     const list = document.getElementById('list')
     const listСommentsHtml = listСomments
         .map((comments, index) => {
