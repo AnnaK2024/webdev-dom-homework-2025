@@ -9,7 +9,7 @@ export const renderListСomments = () => {
             return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comments.name}</div>
-            <div>${comments.data}</div>
+            <div>${comments.date}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">

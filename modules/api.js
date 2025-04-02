@@ -1,3 +1,5 @@
+import { formatDate } from './helpFunctions.js'
+
 const host = 'https://wedev-api.sky.pro/api/v1/:anna-kalinina/comments'
 
 export const fetchListComments = () => {
@@ -9,7 +11,7 @@ export const fetchListComments = () => {
             const getComments = responseData.comments.map((comment) => {
                 return {
                     name: comment.author.name,
-                    date: "18.03.2007 11:23",
+                    date: comment.date,
                     comment: comment.text,
                     likes: comment.likes,
                     isLiked: false,

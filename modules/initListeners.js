@@ -21,14 +21,6 @@ export const initAddCommentListener = (renderListСomments) => {
             return
         }
 
-        // const newComments = {
-        //     name: sanitizeHtml(inputName.value),
-        //     data: formatDate(),
-        //     comment: sanitizeHtml(inputTextComment.value),
-        //     likes: 0,
-        //     isLiked: false,
-        // }
-
         postComment(
             sanitizeHtml(inputTextComment.value),
             sanitizeHtml(inputName.value),
@@ -38,14 +30,9 @@ export const initAddCommentListener = (renderListСomments) => {
             inputName.value = ''
             inputTextComment.value = ''
         })
-
-        // listСomments.push(newComments)
-        // renderListСomments()
-
-        // inputName.value = ''
-        // inputTextComment.value = ''
     })
 }
+
 // ввод комментария по нажатию на клавишу Enter
 export const enteringTextPressingKey = () => {
     inputTextComment.addEventListener('keydown', (event) => {
