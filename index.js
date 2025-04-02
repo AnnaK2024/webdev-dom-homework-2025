@@ -8,4 +8,4 @@ fetchListComments().then((data) => {
     renderListСomments()
 })
 
-initAddCommentListener()
+initAddCommentListener(renderListСomments)

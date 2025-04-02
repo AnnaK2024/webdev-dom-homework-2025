@@ -1,13 +1,14 @@
 import { renderListСomments } from './renderListComments.js'
-import { listСomments } from './listComments.js'
-import { formatDate, sanitizeHtml } from './helpFunctions.js'
+import { listСomments, updateListComments } from './listComments.js'
+import { sanitizeHtml } from './helpFunctions.js'
+import { postComment } from './api.js'
 
 export const addButton = document.getElementById('add-button')
 export const inputName = document.getElementById('name')
 export const inputTextComment = document.getElementById('comment')
 
 //Добавляем новый комменатирй
-export const initAddCommentListener = () => {
+export const initAddCommentListener = (renderListСomments) => {
     addButton.addEventListener('click', () => {
         inputName.classList.remove('error')
         if (inputName.value.trim() === '') {
@@ -20,19 +21,29 @@ export const initAddCommentListener = () => {
             return
         }
 
-        const newComments = {
-            name: sanitizeHtml(inputName.value),
-            data: formatDate(),
-            comment: sanitizeHtml(inputTextComment.value),
-            likes: 0,
-            isLiked: false,
-        }
+        // const newComments = {
+        //     name: sanitizeHtml(inputName.value),
+        //     data: formatDate(),
+        //     comment: sanitizeHtml(inputTextComment.value),
+        //     likes: 0,
+        //     isLiked: false,
+        // }
 
-        listСomments.push(newComments)
-        renderListСomments()
+        postComment(
+            sanitizeHtml(inputTextComment.value),
+            sanitizeHtml(inputName.value),
+        ).then((data) => {
+            updateListComments(data)
+            renderListСomments()
+            inputName.value = ''
+            inputTextComment.value = ''
+        })
 
-        inputName.value = ''
-        inputTextComment.value = ''
+        // listСomments.push(newComments)
+        // renderListСomments()
+
+        // inputName.value = ''
+        // inputTextComment.value = ''
     })
 }
 // ввод комментария по нажатию на клавишу Enter
@@ -60,7 +71,7 @@ export const initClickComment = () => {
 }
 
 //Обработчик лайка
-export const initClickLike = () => {
+export const initClickLike = (renderListСomments) => {
     const buttonLikes = document.querySelectorAll('.like-button')
     for (const buttonLike of buttonLikes) {
         buttonLike.addEventListener('click', (event) => {

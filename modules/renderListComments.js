@@ -30,6 +30,6 @@ export const renderListСomments = () => {
 
     list.innerHTML = listСommentsHtml
 
-    initClickLike()
+    initClickLike(renderListСomments)
     initClickComment()
 }
