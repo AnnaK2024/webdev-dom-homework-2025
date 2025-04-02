@@ -1,5 +1,3 @@
-import { formatDate } from './helpFunctions.js'
-
 const host = 'https://wedev-api.sky.pro/api/v1/:anna-kalinina/comments'
 
 export const fetchListComments = () => {
