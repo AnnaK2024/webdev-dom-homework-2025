@@ -1,7 +1,7 @@
-const host = 'https://wedev-api.sky.pro/api/v1/:anna-kalinina/comments'
+const host = 'https://wedev-api.sky.pro/api/v1/:anna-kalinina'
 
 export const fetchListComments = () => {
-    return fetch(host)
+    return fetch(host + '/comments')
         .then((response) => {
             return response.json()
         })
@@ -20,7 +20,7 @@ export const fetchListComments = () => {
 }
 
 export const postComment = (text, name) => {
-    return fetch(host, {
+    return fetch(host + '/comments', {
         method: 'POST',
         body: JSON.stringify({
             text,
@@ -30,3 +30,17 @@ export const postComment = (text, name) => {
         return fetchListComments()
     })
 }
+
+// удаляем последний комментарий
+export const deleteLastComments = () => {
+    const deleteButton = document.getElementById('delete-button')
+    for (const deleteEl of deleteButton) {
+        deleteEl.addEventListener('click', (event) => {
+            event.stopImmediatePropagation()
+            const idDelete = deleteEl.dataset.id
+
+            fetch
+
+        })
+    }
+deleteLastComments()

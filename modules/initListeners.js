@@ -21,12 +21,22 @@ export const initAddCommentListener = (renderListСomments) => {
             return
         }
 
+        document.querySelector('.form-loading').style.display = 'block'
+        document.querySelector('.add-form').style.display = 'none'
+
         postComment(
             sanitizeHtml(inputTextComment.value),
             sanitizeHtml(inputName.value),
         ).then((data) => {
+            document.querySelector('.form-loading').style.display = 'none'
+            document.querySelector('.add-form').style.display = 'flex'
+
             updateListComments(data)
             renderListСomments()
+
+            addButton.disabled = false
+            addButton.textContent = 'Написать'
+
             inputName.value = ''
             inputTextComment.value = ''
         })
@@ -72,18 +82,4 @@ export const initClickLike = (renderListСomments) => {
         })
     }
 }
-// удаляем последний комментарий
-export const deleteLastComments = () => {
-    const deleteButton = document.getElementById('delete-button')
 
-    deleteButton.addEventListener('click', () => {
-        if (listСomments.length === 0) {
-            alert('Нет комментариев для удаления!')
-            return
-        }
-        const indexToDelete = listСomments.length - 1 // Индекс последнего комментария
-        listСomments.splice(indexToDelete, 1) // Удаляем комментарий по индексу
-        renderListСomments() // Обновляем отображение комментариев
-    })
-}
-deleteLastComments()
