@@ -1,4 +1,4 @@
-import { initClickLike, initClickComment } from './initlisteners.js'
+import { initClickComment, initClickLike } from './initListeners.js'
 import { listСomments } from './listComments.js'
 
 // Функция рендеринга массива

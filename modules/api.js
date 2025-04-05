@@ -1,3 +1,5 @@
+import { formatDate } from './helpFunctions.js'
+
 const host = 'https://wedev-api.sky.pro/api/v1/:anna-kalinina'
 
 export const fetchListComments = () => {
@@ -9,7 +11,7 @@ export const fetchListComments = () => {
             const getComments = responseData.comments.map((comment) => {
                 return {
                     name: comment.author.name,
-                    date: comment.date,
+                    date: formatDate(comment.date),
                     comment: comment.text,
                     likes: comment.likes,
                     isLiked: false,
@@ -30,21 +32,3 @@ export const postComment = (text, name) => {
         return fetchListComments()
     })
 }
-
-// // удаляем последний комментарий
-// export const deleteLastComments = () => {
-//     const deleteButton = document.getElementById('delete-button')
-//     for (const deleteEl of deleteButton) {
-//         deleteEl.addEventListener('click', (event) => {
-//             event.stopImmediatePropagation()
-//             const idDelete = deleteEl.dataset.id
-
-//             fetch(host + '/comments}' + id, {
-//                 method: 'DELETE',
-//             }).then(() => {
-//                 return fetchListComments()
-//             })
-
-//         })
-//     }
-// deleteLastComments()
