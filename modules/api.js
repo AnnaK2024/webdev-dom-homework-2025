@@ -31,16 +31,20 @@ export const postComment = (text, name) => {
     })
 }
 
-// удаляем последний комментарий
-export const deleteLastComments = () => {
-    const deleteButton = document.getElementById('delete-button')
-    for (const deleteEl of deleteButton) {
-        deleteEl.addEventListener('click', (event) => {
-            event.stopImmediatePropagation()
-            const idDelete = deleteEl.dataset.id
+// // удаляем последний комментарий
+// export const deleteLastComments = () => {
+//     const deleteButton = document.getElementById('delete-button')
+//     for (const deleteEl of deleteButton) {
+//         deleteEl.addEventListener('click', (event) => {
+//             event.stopImmediatePropagation()
+//             const idDelete = deleteEl.dataset.id
 
-            fetch
+//             fetch(host + '/comments}' + id, {
+//                 method: 'DELETE',
+//             }).then(() => {
+//                 return fetchListComments()
+//             })
 
-        })
-    }
-deleteLastComments()
+//         })
+//     }
+// deleteLastComments()

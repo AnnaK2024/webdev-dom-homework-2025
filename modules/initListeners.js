@@ -1,6 +1,6 @@
 import { renderListСomments } from './renderListComments.js'
 import { listСomments, updateListComments } from './listComments.js'
-import { sanitizeHtml } from './helpFunctions.js'
+import { sanitizeHtml, delay } from './helpFunctions.js'
 import { postComment } from './api.js'
 
 export const addButton = document.getElementById('add-button')
@@ -73,13 +73,17 @@ export const initClickLike = (renderListСomments) => {
     for (const buttonLike of buttonLikes) {
         buttonLike.addEventListener('click', (event) => {
             event.stopImmediatePropagation()
-            const likeIndex = buttonLike.dataset.indexLike // считываем значение дата-атрибута кнопки
-            const likeComment = listСomments[likeIndex] // перебираем индексы комментариев из списка
-            likeComment.isLiked = !likeComment.isLiked // цвет лайка
-            likeComment.likes += likeComment.isLiked ? 1 : -1 // количество лайков
 
-            renderListСomments()
+            buttonLike.classList.add('-loading-like')
+
+            delay(2000).then(() => {
+                const likeIndex = buttonLike.dataset.indexLike // считываем значение дата-атрибута кнопки
+                const likeComment = listСomments[likeIndex] // перебираем индексы комментариев из списка
+                likeComment.isLiked = !likeComment.isLiked // цвет лайка
+                likeComment.likes += likeComment.isLiked ? 1 : -1 // количество лайков
+
+                renderListСomments()
+            })
         })
     }
 }
-

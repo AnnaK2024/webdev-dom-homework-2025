@@ -11,3 +11,11 @@ export const formatDate = () => {
 
     return `${formattedDate} ${formattedTime}`
 }
+
+export function delay(interval = 300) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve()
+        }, interval)
+    })
+}
