@@ -10,12 +10,17 @@ export const inputTextComment = document.getElementById('comment')
 //Добавляем новый комменатирй
 export const initAddCommentListener = (renderListСomments) => {
     addButton.addEventListener('click', () => {
+        // Убираем ошибки из полей ввода
         inputName.classList.remove('error')
+        inputTextComment.classList.remove('error')
+
+        // Проверка имени
         if (inputName.value.trim() === '') {
             inputName.classList.add('error')
             return
         }
-        inputTextComment.classList.remove('error')
+
+        // Проверка текста комментария
         if (inputTextComment.value.trim() === '') {
             inputTextComment.classList.add('error')
             return
@@ -24,22 +29,56 @@ export const initAddCommentListener = (renderListСomments) => {
         document.querySelector('.preloaderFooter').style.display = 'block'
         document.querySelector('.add-form').style.display = 'none'
 
-        postComment(
-            sanitizeHtml(inputTextComment.value),
-            sanitizeHtml(inputName.value),
-        ).then((data) => {
-            document.querySelector('.preloaderFooter').style.display = 'none'
-            document.querySelector('.add-form').style.display = 'flex'
+        const maximumNumberAttempts = 3
 
-            updateListComments(data)
-            renderListСomments()
+        // Функция для отправки комментария с повторными попытками
+        const handlePostClick = (attempt = 0) => {
+            if (attempt >= maximumNumberAttempts) {
+                console.error(
+                    'Достигнуто максимальное количество попыток отправки комментария.',
+                )
+                alert('Не удалось отправить комментарий. Попробуйте позже.')
+                return
+            }
 
-            addButton.disabled = false
-            addButton.textContent = 'Написать'
+            postComment(
+                sanitizeHtml(inputTextComment.value),
+                sanitizeHtml(inputName.value),
+            )
+                .then((data) => {
+                    updateListComments(data)
+                    renderListСomments()
+                    inputName.value = ''
+                    inputTextComment.value = ''
+                })
+                .catch((error) => {
+                    if (error.message === 'Failed to fetch') {
+                        alert('Нет интернета, попробуйте еще раз.')
+                    } else if (error.message === 'Ошибка сервера') {
+                        alert('Ошибка сервера. Повторяем попытку...')
+                    } else if (error.message === 'Неверный запрос') {
+                        alert('Вы ввели в одно из полей менее трех символов.')
+                        inputName.classList.add('error')
+                        inputTextComment.classList.add('error')
 
-            inputName.value = ''
-            inputTextComment.value = ''
-        })
+                        setTimeout(() => {
+                            inputName.classList.remove('error')
+                            inputTextComment.classList.remove('error')
+                        }, 3000)
+                    }
+
+                    // Повторная попытка отправки комментария
+                    handlePostClick(attempt + 1)
+                })
+                .finally(() => {
+                    document.querySelector('.preloaderFooter').style.display =
+                        'none'
+                    document.querySelector('.add-form').style.display = 'flex'
+                })
+        }
+
+        // Начинаем отправку комментария
+        handlePostClick()
     })
 }
 
@@ -87,22 +126,3 @@ export const initClickLike = (renderListСomments) => {
         })
     }
 }
-
-// // удаляем последний комментарий
-// export const initDeleteLastComments = () => {
-//     const deleteButton = document.getElementById('delete-button')
-
-//     for (const deleteEl of deleteButton) {
-//         deleteEl.addEventListener('click', (event) => {
-//             event.stopImmediatePropagation()
-//             const idDelete = deleteEl.dataset.id
-
-//             fetch(host + '/comments}' + id, {
-//                 method: 'DELETE',
-//             }).then(() => {
-//                 return fetchListComments()
-//             })
-//         })
-//     }
-// }
-// initDeleteLastComments();
