@@ -1,5 +1,5 @@
+import { initClickComment, initClickLike } from './initListeners.js'
 import { listСomments } from './listComments.js'
-import { initClickLike, initClickComment } from './initlisteners.js'
 
 // Функция рендеринга массива
 export const renderListСomments = () => {
@@ -9,7 +9,7 @@ export const renderListСomments = () => {
             return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comments.name}</div>
-            <div>${comments.data}</div>
+            <div>${comments.date}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
@@ -30,6 +30,6 @@ export const renderListСomments = () => {
 
     list.innerHTML = listСommentsHtml
 
-    initClickLike()
+    initClickLike(renderListСomments)
     initClickComment()
 }

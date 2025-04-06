@@ -11,10 +11,19 @@
             .error {
                 background-color: yellow;
             }
+            .hidden {
+                display: none;
+            }
         </style>
         <div class="container">
+            <div id="loader" class="preloader">
+                <p class="preloader-text">
+                    подождите, комментарии загружаются...
+                </p>
+            </div>
+
             <ul id="list" class="comments"></ul>
-            <div class="add-form">
+            <div class="add-form hidden">
                 <input
                     id="name"
                     type="text"
@@ -34,10 +43,17 @@
                     </button>
                 </div>
                 <div class="add-form-row">
-                    <button id="delete-button" class="delete-form-button">
+                    <button
+                        id="delete-button"
+                        class="delete-form-button"
+                        data-id="${index}"
+                    >
                         Удалить последний коментарий
                     </button>
                 </div>
+            </div>
+            <div class="preloaderFooter hidden">
+                Комментарий добавляется......
             </div>
         </div>
     </body>

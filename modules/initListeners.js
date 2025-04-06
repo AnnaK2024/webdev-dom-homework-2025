@@ -1,40 +1,86 @@
 import { renderListСomments } from './renderListComments.js'
-import { listСomments } from './listComments.js'
-import { formatDate, sanitizeHtml } from './helpFunctions.js'
+import { listСomments, updateListComments } from './listComments.js'
+import { sanitizeHtml, delay } from './helpFunctions.js'
+import { postComment } from './api.js'
 
 export const addButton = document.getElementById('add-button')
 export const inputName = document.getElementById('name')
 export const inputTextComment = document.getElementById('comment')
 
 //Добавляем новый комменатирй
-export const initAddCommentListener = () => {
+export const initAddCommentListener = (renderListСomments) => {
     addButton.addEventListener('click', () => {
+        // Убираем ошибки из полей ввода
         inputName.classList.remove('error')
+        inputTextComment.classList.remove('error')
+
+        // Проверка имени
         if (inputName.value.trim() === '') {
             inputName.classList.add('error')
             return
         }
-        inputTextComment.classList.remove('error')
+
+        // Проверка текста комментария
         if (inputTextComment.value.trim() === '') {
             inputTextComment.classList.add('error')
             return
         }
 
-        const newComments = {
-            name: sanitizeHtml(inputName.value),
-            data: formatDate(),
-            comment: sanitizeHtml(inputTextComment.value),
-            likes: 0,
-            isLiked: false,
+        document.querySelector('.preloaderFooter').style.display = 'block'
+        document.querySelector('.add-form').style.display = 'none'
+
+        const maximumNumberAttempts = 3
+
+        // Функция для отправки комментария с повторными попытками
+        const handlePostClick = (attempt = 0) => {
+            if (attempt >= maximumNumberAttempts) {
+                console.error(
+                    'Достигнуто максимальное количество попыток отправки комментария.',
+                )
+                alert('Не удалось отправить комментарий. Попробуйте позже.')
+                return
+            }
+
+            postComment(
+                sanitizeHtml(inputTextComment.value),
+                sanitizeHtml(inputName.value),
+            )
+                .then((data) => {
+                    updateListComments(data)
+                    renderListСomments()
+                    inputName.value = ''
+                    inputTextComment.value = ''
+                })
+                .catch((error) => {
+                    if (error.message === 'Failed to fetch') {
+                        alert('Нет интернета, попробуйте еще раз.')
+                        handlePostClick(attempt + 1)
+                    } else if (error.message === 'Сервер упал') {
+                        alert('Ошибка сервера. Повторяем попытку...')
+                        handlePostClick(attempt + 1)
+                    } else if (error.message === 'Вы допустили ошибку') {
+                        alert('Вы ввели в одно из полей менее трех символов.')
+                        inputName.classList.add('error')
+                        inputTextComment.classList.add('error')
+
+                        setTimeout(() => {
+                            inputName.classList.remove('error')
+                            inputTextComment.classList.remove('error')
+                        }, 3000)
+                    }
+                })
+                .finally(() => {
+                    document.querySelector('.preloaderFooter').style.display =
+                        'none'
+                    document.querySelector('.add-form').style.display = 'flex'
+                })
         }
 
-        listСomments.push(newComments)
-        renderListСomments()
-
-        inputName.value = ''
-        inputTextComment.value = ''
+        // Начинаем отправку комментария
+        handlePostClick()
     })
 }
+
 // ввод комментария по нажатию на клавишу Enter
 export const enteringTextPressingKey = () => {
     inputTextComment.addEventListener('keydown', (event) => {
@@ -60,32 +106,22 @@ export const initClickComment = () => {
 }
 
 //Обработчик лайка
-export const initClickLike = () => {
+export const initClickLike = (renderListСomments) => {
     const buttonLikes = document.querySelectorAll('.like-button')
     for (const buttonLike of buttonLikes) {
         buttonLike.addEventListener('click', (event) => {
             event.stopImmediatePropagation()
-            const likeIndex = buttonLike.dataset.indexLike // считываем значение дата-атрибута кнопки
-            const likeComment = listСomments[likeIndex] // перебираем индексы комментариев из списка
-            likeComment.isLiked = !likeComment.isLiked // цвет лайка
-            likeComment.likes += likeComment.isLiked ? 1 : -1 // количество лайков
 
-            renderListСomments()
+            buttonLike.classList.add('-loading-like')
+
+            delay(2000).then(() => {
+                const likeIndex = buttonLike.dataset.indexLike // считываем значение дата-атрибута кнопки
+                const likeComment = listСomments[likeIndex] // перебираем индексы комментариев из списка
+                likeComment.isLiked = !likeComment.isLiked // цвет лайка
+                likeComment.likes += likeComment.isLiked ? 1 : -1 // количество лайков
+
+                renderListСomments()
+            })
         })
     }
 }
-// удаляем последний комментарий
-export const deleteLastComments = () => {
-    const deleteButton = document.getElementById('delete-button')
-
-    deleteButton.addEventListener('click', () => {
-        if (listСomments.length === 0) {
-            alert('Нет комментариев для удаления!')
-            return
-        }
-        const indexToDelete = listСomments.length - 1 // Индекс последнего комментария
-        listСomments.splice(indexToDelete, 1) // Удаляем комментарий по индексу
-        renderListСomments() // Обновляем отображение комментариев
-    })
-}
-deleteLastComments()
