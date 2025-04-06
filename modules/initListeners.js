@@ -54,9 +54,11 @@ export const initAddCommentListener = (renderListСomments) => {
                 .catch((error) => {
                     if (error.message === 'Failed to fetch') {
                         alert('Нет интернета, попробуйте еще раз.')
-                    } else if (error.message === 'Ошибка сервера') {
+                        handlePostClick(attempt + 1)
+                    } else if (error.message === 'Сервер упал') {
                         alert('Ошибка сервера. Повторяем попытку...')
-                    } else if (error.message === 'Неверный запрос') {
+                        handlePostClick(attempt + 1)
+                    } else if (error.message === 'Вы допустили ошибку') {
                         alert('Вы ввели в одно из полей менее трех символов.')
                         inputName.classList.add('error')
                         inputTextComment.classList.add('error')
@@ -66,9 +68,6 @@ export const initAddCommentListener = (renderListСomments) => {
                             inputTextComment.classList.remove('error')
                         }, 3000)
                     }
-
-                    // Повторная попытка отправки комментария
-                    handlePostClick(attempt + 1)
                 })
                 .finally(() => {
                     document.querySelector('.preloaderFooter').style.display =
