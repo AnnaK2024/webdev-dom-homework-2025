@@ -1,6 +1,6 @@
 import { formatDate } from './helpFunctions.js'
 
-const token = 'asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k'
+let token = 'asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k'
 const host = 'https://wedev-api.sky.pro/api/v2/:anna-kalinina'
 
 export const fetchListComments = (attempt = 1) => {
@@ -84,25 +84,3 @@ export function deleteComment({ id }) {
         return response.json()
     })
 }
-
-// // удаляем последний комментарий
-// export const initDeleteLastComments = () => {
-//     const deleteButton = document.getElementById('delete-button')
-
-//     for (const deleteEl of deleteButton) {
-//         deleteEl.addEventListener('click', (event) => {
-//             event.stopImmediatePropagation()
-//             const idDelete = deleteEl.dataset.id
-
-//             fetch(host + '/comments}' + ${idDelete}, {
-//                 method: 'DELETE',
-//             }).then((response) => {
-//                 return response.json()
-//             }).then((data) => {
-//                 updateListComments(data.comments)
-//                 renderListСomments()
-//             })
-//         })
-//     }
-// }
-// initDeleteLastComments();

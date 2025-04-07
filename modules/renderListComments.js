@@ -1,4 +1,9 @@
-import { initClickComment, initClickLike } from './initListeners.js'
+import {
+    initAddCommentListener,
+    initClickComment,
+    initClickLike,
+    initDeleteComments,
+} from './initListeners.js'
 import { listСomments } from './listComments.js'
 
 // Функция рендеринга массива
@@ -68,9 +73,7 @@ export const renderListСomments = () => {
                   <button
                       id="delete-button"
                       class="delete-form-button"
-                      data-id="${index}"
-                  >
-                      Удалить последний коментарий
+                      data-id="${comments.index}"> Удалить коментарий
                   </button>
               </div>
           </div>
@@ -84,4 +87,6 @@ export const renderListСomments = () => {
 
     initClickLike(renderListСomments)
     initClickComment()
+    initDeleteComments()
+    initAddCommentListener()
 }
