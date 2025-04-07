@@ -81,16 +81,16 @@ export const initAddCommentListener = (renderListСomments) => {
     })
 }
 
-// ввод комментария по нажатию на клавишу Enter
-export const enteringTextPressingKey = () => {
-    inputTextComment.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault() // Предотвращаем переход на новую строку
-            addButton.click() // Имитация клика по кнопке "Написать"
-        }
-    })
-}
-enteringTextPressingKey()
+// // ввод комментария по нажатию на клавишу Enter
+// export const enteringTextPressingKey = () => {
+//     inputTextComment.addEventListener('keydown', (event) => {
+//         if (event.key === 'Enter' && !event.shiftKey) {
+//             event.preventDefault() // Предотвращаем переход на новую строку
+//             addButton.click() // Имитация клика по кнопке "Написать"
+//         }
+//     })
+// }
+// enteringTextPressingKey()
 
 // Ответ на комментарий
 export const initClickComment = () => {

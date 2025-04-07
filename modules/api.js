@@ -1,14 +1,19 @@
 import { formatDate } from './helpFunctions.js'
 
-const host = 'https://wedev-api.sky.pro/api/v1/:anna-kalinina'
+const token = 'asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k'
+const host = 'https://wedev-api.sky.pro/api/v2/:anna-kalinina'
 
 export const fetchListComments = (attempt = 1) => {
-    return fetch(host + '/comments')
+    return fetch(host + '/comments', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
         .then((response) => {
             if (response.status === 500) {
                 throw new Error('Сервер упал')
             }
-            return response.json() // исправлено на вызов функции
+            return response.json()
         })
         .then((responseData) => {
             const getComments = responseData.comments.map((comment) => {
@@ -40,6 +45,9 @@ export const fetchListComments = (attempt = 1) => {
 export const postComment = (text, name) => {
     return fetch(host + '/comments', {
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
             text,
             name,
@@ -64,6 +72,17 @@ export const postComment = (text, name) => {
         .then(() => {
             return fetchListComments()
         })
+}
+
+export function deleteComment({ id }) {
+    return fetch(`${host + '/comments'}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }).then((response) => {
+        return response.json()
+    })
 }
 
 // // удаляем последний комментарий

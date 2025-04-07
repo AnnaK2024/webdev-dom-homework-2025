@@ -3,6 +3,10 @@ import { initAddCommentListener } from './modules/initListeners.js'
 import { updateListComments } from './modules/listComments.js'
 import { renderListСomments } from './modules/renderListComments.js'
 
+import { renderLogin } from './modules/renderLogin.js'
+
+renderLogin()
+
 window.onload = function () {
     let preloader = document.getElementById('loader')
     let form = document.querySelector('.add-form')
