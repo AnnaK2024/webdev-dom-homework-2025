@@ -9,38 +9,19 @@
     <body>
         <style>
             .error {
-                background-color: yellow;
+                background-color: #eab1f9;
+            }
+            .hidden {
+                display: none;
             }
         </style>
         <div class="container">
-            <ul id="list" class="comments"></ul>
-            <div class="add-form">
-                <input
-                    id="name"
-                    type="text"
-                    class="add-form-name"
-                    placeholder="Введите ваше имя"
-                />
-                <textarea
-                    id="comment"
-                    type="textarea"
-                    class="add-form-text"
-                    placeholder="Введите ваш коментарий"
-                    rows="4"
-                ></textarea>
-                <div class="add-form-row">
-                    <button id="add-button" class="add-form-button">
-                        Написать
-                    </button>
-                </div>
-                <div class="add-form-row">
-                    <button id="delete-button" class="delete-form-button">
-                        Удалить последний коментарий
-                    </button>
-                </div>
+            <div id="loader" class="preloader">
+                <p class="preloader-text">
+                    подождите, комментарии загружаются...
+                </p>
             </div>
         </div>
+        <script type="module" src="./index.js"></script>
     </body>
-
-    <script type="module" src="./index.js"></script>
 </html>
