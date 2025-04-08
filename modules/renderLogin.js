@@ -1,25 +1,43 @@
+import { login } from './api.js'
+
 export const renderLogin = () => {
-    const app = document.getElementById('app')
-    app.innerHTML = `
-    <h1> Страница входа </h1>
-    <div class="form">
-        <h3 class="form-title">Форма входа</h3>
-        <div class="add-form-row">
+    const container = document.querySelector('.container')
+    const loginHTML = `
+    <div class="add-form">
+        <div class="add-form-input">
             <input
                 type="text"
                 id="login-input"
-                class="input"
+                class="inputLog"
                 placeholder="Введите логин"
+                required
             />
             <input
                 type="text"
                 id="password-input"
-                class="input"
+                class="inputPas"
                 placeholder="Введите пароль"
+                required
             />
         </div>
         <br />
-        <button class="button" id="login-button"> Войти </button>
-        <button class="button" id="reg-button"> Зарегистрироваться </button>
+        <button class="add-form-button-main button-main " type="submit"> Войти </button>
+        <u class="add-form-button-link registry"> Зарегистрироваться </u>
     </div> `
+
+    container.innerHTML = loginHTML
+
+    const loginEl = document.querySelector('#login-input')
+    const passwordEl = document.querySelector('#password-input')
+    const submitButtonEl = document.querySelector('.button-main')
+
+    submitButtonEl.addEventListener('clik', () => {
+        login(loginEl.value, passwordEl.value)
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+            })
+    })
 }

@@ -229,3 +229,36 @@ p {
 .-error{
     border: 3px solid red;
 }
+.inputLog{
+    margin-top: 24px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color:white ;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.inputLog:hover {
+    opacity: 0.9;
+}
+.inputPas{
+    margin-top: 24px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color:white ;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.inputPas:hover {
+    opacity: 0.9;
+}
+.add-form-input {
+    display: flex;
+    justify-content: center;
+}
+.link-login {
+    text-decoration: underline ;
+}

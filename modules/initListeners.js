@@ -1,7 +1,7 @@
 import { renderListСomments } from './renderListComments.js'
 import { listСomments, updateListComments } from './listComments.js'
 import { sanitizeHtml, delay } from './helpFunctions.js'
-import { deleteComment, postComment } from './api.js'
+import { postComment } from './api.js'
 
 export const addButton = document.getElementById('add-button')
 export const inputName = document.getElementById('name')
@@ -81,16 +81,16 @@ export const initAddCommentListener = (renderListСomments) => {
     })
 }
 
-// ввод комментария по нажатию на клавишу Enter
-export const enteringTextPressingKey = () => {
-    inputTextComment.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault() // Предотвращаем переход на новую строку
-            addButton.click() // Имитация клика по кнопке "Написать"
-        }
-    })
-}
-enteringTextPressingKey()
+// // ввод комментария по нажатию на клавишу Enter
+// export const enteringTextPressingKey = () => {
+//     inputTextComment.addEventListener('keydown', (event) => {
+//         if (event.key === 'Enter' && !event.shiftKey) {
+//             event.preventDefault() // Предотвращаем переход на новую строку
+//             addButton.click() // Имитация клика по кнопке "Написать"
+//         }
+//     })
+// }
+// enteringTextPressingKey()
 
 // Ответ на комментарий
 export const initClickComment = () => {
@@ -126,27 +126,27 @@ export const initClickLike = (renderListСomments) => {
     }
 }
 
-// удаляем комментарий
-export const initDeleteComments = () => {
-    const deleteButton = document.getElementById('delete-button')
+// // удаляем комментарий
+// export const initDeleteComments = () => {
+//     const deleteButton = document.getElementById('delete-button')
 
-    for (const deleteEl of deleteButton) {
-        deleteEl.addEventListener('click', (event) => {
-            event.stopImmediatePropagation()
-            const idDelete = deleteEl.dataset.id
+//     for (const deleteEl of deleteButton) {
+//         deleteEl.addEventListener('click', (event) => {
+//             event.stopImmediatePropagation()
+//             const idDelete = deleteEl.dataset.id
 
-            deleteEl.disabled = true
-            deleteEl.textContent = 'Комментарий удаляется...'
+//             deleteEl.disabled = true
+//             deleteEl.textContent = 'Комментарий удаляется...'
 
-            deleteComment({ idDelete })
-                .then(() => {
-                    return renderListСomments()
-                })
-                .then(() => {
-                    deleteEl.disabled = false
-                    deleteEl.textContent = 'Удалить комментарий'
-                })
-        })
-    }
-}
-initDeleteComments()
+//             deleteComment({ idDelete })
+//                 .then(() => {
+//                     return renderListСomments()
+//                 })
+//                 .then(() => {
+//                     deleteEl.disabled = false
+//                     deleteEl.textContent = 'Удалить комментарий'
+//                 })
+//         })
+//     }
+// }
+// initDeleteComments()

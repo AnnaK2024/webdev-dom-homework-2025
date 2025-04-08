@@ -1,14 +1,15 @@
+import { token } from './api.js'
 import {
     initAddCommentListener,
     initClickComment,
     initClickLike,
-    initDeleteComments,
 } from './initListeners.js'
 import { listСomments } from './listComments.js'
+import { renderLogin } from './renderLogin.js'
 
 // Функция рендеринга массива
 export const renderListСomments = () => {
-    const app = document.getElementById('app')
+    const container = document.querySelector('.container')
     const listСommentsHtml = listСomments
         .map((comments, index) => {
             return `<li class="comment" data-index="${index}">
@@ -33,23 +34,8 @@ export const renderListСomments = () => {
         })
         .join('')
 
-    const appHtml = `
-      <style>
-          .error {
-              background-color: #eab1f9;
-          }
-          .hidden {
-              display: none;
-          }
-      </style>
-      <div class="container">
-          <div id="loader" class="preloader">
-              <p class="preloader-text">
-                  подождите, комментарии загружаются...
-              </p>
-          </div>
-
-          <ul id="list" class="comments"> ${listСommentsHtml} </ul>
+    //добавление нового комментария    
+    const containerCommentsHtml = `
           <div class="add-form hidden">
               <input
                   id="name"
@@ -73,20 +59,40 @@ export const renderListСomments = () => {
                   <button
                       id="delete-button"
                       class="delete-form-button"
-                      data-id="${comments.index}"> Удалить коментарий
+                      > Удалить коментарий
                   </button>
               </div>
           </div>
-          
           <div class="preloaderFooter hidden">
               Комментарий добавляется......
           </div>
       </div>
     `
-    app.innerHTML = appHtml
+    const linkToLoginText = `чтобы отправить комментарий, <span class= "link-login"> войдите </span> `
 
-    initClickLike(renderListСomments)
-    initClickComment()
-    initDeleteComments()
-    initAddCommentListener()
+    const baseHtml = `
+      <ul id="list" class="comments"> ${listСommentsHtml}
+      ${token ? containerCommentsHtml : linkToLoginText} </ul>
+    `
+    container.innerHTML = baseHtml
+
+    if (token) {
+        initClickLike(renderListСomments)
+        initClickComment()
+        // initDeleteComments()
+        initAddCommentListener(renderListСomments)
+    } else {
+        document.querySelector('.link-login').addEventListener('click', () => {
+            renderLogin()
+        })
+    }
 }
+
+// document.getElementById('delete-button').addEventListener('click', () => {
+//     if (listComments.length > 0) {
+//         listComments.pop() // Удаляем последний комментарий
+//         renderListComments() // Перерисовываем список комментариев
+//     } else {
+//         alert('Нет комментариев для удаления!') // Уведомление, если комментариев нет
+//     }
+// })

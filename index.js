@@ -1,11 +1,7 @@
 import { fetchListComments } from './modules/api.js'
-import { initAddCommentListener } from './modules/initListeners.js'
 import { updateListComments } from './modules/listComments.js'
 import { renderListСomments } from './modules/renderListComments.js'
-
 import { renderLogin } from './modules/renderLogin.js'
-
-renderLogin()
 
 window.onload = function () {
     let preloader = document.getElementById('loader')
@@ -23,9 +19,11 @@ window.onload = function () {
             form.classList.remove('hidden')
         })
         .catch((error) => {
-            console.error('Ошибка при загрузке комментариев:', error)
-            preloader.style.display = 'none'
+            // console.error('Ошибка при загрузке комментариев:', error)
+            // preloader.style.display = 'none'
         })
 
-    initAddCommentListener(renderListСomments)
+    // fetchListComments()
 }
+renderListСomments()
+renderLogin()
