@@ -187,9 +187,6 @@ body {
     color: #fff;
     font-family: Helvetica;
     font-size: 20px;
-}
-
-p {
     position: relative;
     font-family: sans-serif;
     text-transform: uppercase;
@@ -203,6 +200,7 @@ p {
     -webkit-background-clip: text;
     -webkit-text-fill-color: rgba(255, 255, 255, 0);
 }
+
 @keyframes animate {
     0% {
         background-position: -500%;
@@ -237,7 +235,7 @@ p {
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    color: #ffffff;
+    color:black ;
 }
 .inputLog:hover {
     opacity: 0.9;
@@ -250,14 +248,41 @@ p {
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    color: #ffffff;
+    color: black;
 }
 .inputPas:hover {
     opacity: 0.9;
 }
 .add-form-input {
     display: flex;
-    justify-content: center;
+    justify-content: space-between
+}
+.add-form-button-main{
+    width: 250px;
+    margin-left: 152px;
+    margin-top: 24px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color:white ;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: rgb(128 128 128);
+}
+.add-form-button-main:hover {
+    opacity: 0.9;
+}
+
+.add-form-button-link{
+    text-align: center;
+    margin-top: 10px;
+    font-size: 22px;
+}
+
+.link{
+    text-align: center;
+    font-size: 20px;
+    margin-top: 0px;
 }
 .link-login {
     text-decoration: underline ;

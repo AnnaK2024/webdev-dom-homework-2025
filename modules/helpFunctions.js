@@ -19,3 +19,10 @@ export function delay(interval = 300) {
         }, interval)
     })
 }
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     // Скрываем лоадер
+//     document.querySelector('.preloader').classList.add('hidden')
+//     // Показываем элемент app
+//     document.getElementById('app').classList.remove('hidden')
+// })

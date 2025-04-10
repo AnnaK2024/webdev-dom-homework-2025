@@ -8,6 +8,11 @@ export const setToken = (newToken) => {
     token = newToken
 }
 
+export let name = ''
+export const setName = (newName) => {
+    token = newName
+}
+
 export const fetchListComments = (attempt = 1) => {
     return fetch(host + '/comments')
         .then((response) => {

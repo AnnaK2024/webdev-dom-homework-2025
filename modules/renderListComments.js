@@ -9,7 +9,7 @@ import { renderLogin } from './renderLogin.js'
 
 // Функция рендеринга массива
 export const renderListСomments = () => {
-    const container = document.querySelector('.container')
+    const app = document.getElementById('app')
     const listСommentsHtml = listСomments
         .map((comments, index) => {
             return `<li class="comment" data-index="${index}">
@@ -34,14 +34,16 @@ export const renderListСomments = () => {
         })
         .join('')
 
-    //добавление нового комментария    
-    const containerCommentsHtml = `
+    //добавление нового комментария
+    const appCommentsHtml = `
           <div class="add-form hidden">
               <input
                   id="name"
                   type="text"
                   class="add-form-name"
                   placeholder="Введите ваше имя"
+                  readonly
+                  value="${name}"
               />
               <textarea
                   id="comment"
@@ -64,23 +66,23 @@ export const renderListСomments = () => {
               </div>
           </div>
           <div class="preloaderFooter hidden">
-              Комментарий добавляется......
+            <p class="loaderАdding"> Комментарий добавляется...... </p>
           </div>
       </div>
     `
-    const linkToLoginText = `чтобы отправить комментарий, <span class= "link-login"> войдите </span> `
+    const linkToLoginText = `<p class="link"> чтобы отправить комментарий, <span class= "link-login"> войдите </span> `
 
     const baseHtml = `
       <ul id="list" class="comments"> ${listСommentsHtml}
-      ${token ? containerCommentsHtml : linkToLoginText} </ul>
+      ${token ? appCommentsHtml : linkToLoginText} </ul>
     `
-    container.innerHTML = baseHtml
+    app.innerHTML = baseHtml
 
     if (token) {
+        initAddCommentListener(renderListСomments)
         initClickLike(renderListСomments)
         initClickComment()
         // initDeleteComments()
-        initAddCommentListener(renderListСomments)
     } else {
         document.querySelector('.link-login').addEventListener('click', () => {
             renderLogin()

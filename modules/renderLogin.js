@@ -1,7 +1,8 @@
-import { login } from './api.js'
+import { fetchAndRenderListComments } from '../index.js'
+import { login, setName, setToken } from './api.js'
 
 export const renderLogin = () => {
-    const container = document.querySelector('.container')
+    const app = document.getElementById('app')
     const loginHTML = `
     <div class="add-form">
         <div class="add-form-input">
@@ -23,21 +24,23 @@ export const renderLogin = () => {
         <br />
         <button class="add-form-button-main button-main " type="submit"> Войти </button>
         <u class="add-form-button-link registry"> Зарегистрироваться </u>
-    </div> `
-
-    container.innerHTML = loginHTML
+    </div>
+ `
+    app.innerHTML = loginHTML
 
     const loginEl = document.querySelector('#login-input')
     const passwordEl = document.querySelector('#password-input')
     const submitButtonEl = document.querySelector('.button-main')
 
-    submitButtonEl.addEventListener('clik', () => {
+    submitButtonEl.addEventListener('click', () => {
         login(loginEl.value, passwordEl.value)
             .then((response) => {
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
+                setToken(data.user.token)
+                setName(data.user.name)
+                fetchAndRenderListComments()
             })
     })
 }
