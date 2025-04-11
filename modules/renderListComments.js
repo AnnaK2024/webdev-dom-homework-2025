@@ -1,4 +1,4 @@
-import { token } from './api.js'
+import { name, token } from './api.js'
 import {
     initAddCommentListener,
     initClickComment,
@@ -36,7 +36,7 @@ export const renderListСomments = () => {
 
     //добавление нового комментария
     const appCommentsHtml = `
-          <div class="add-form hidden">
+          <div class="add-form">
               <input
                   id="name"
                   type="text"

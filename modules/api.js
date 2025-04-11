@@ -10,7 +10,7 @@ export const setToken = (newToken) => {
 
 export let name = ''
 export const setName = (newName) => {
-    token = newName
+   name = newName
 }
 
 export const fetchListComments = (attempt = 1) => {

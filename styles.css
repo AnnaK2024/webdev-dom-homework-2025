@@ -170,7 +170,7 @@ body {
     }
 }
 
-.preloader {
+.loader {
     position: fixed;
     top: 0;
     left: 0;
@@ -182,15 +182,15 @@ body {
     background: #202020;
 }
 
-.preloader-text {
+.loader-text{
     margin-top: 50px;
     color: #fff;
     font-family: Helvetica;
-    font-size: 20px;
+    font-size: 15px;
     position: relative;
     font-family: sans-serif;
     text-transform: uppercase;
-    font-size: 2em;
+    font-size: 25px;
     letter-spacing: 4px;
     overflow: hidden;
     background: linear-gradient(90deg, #000, #fff, #000);
@@ -224,27 +224,40 @@ body {
     }
 }
 
-.-error{
+.-error {
     border: 3px solid red;
 }
-.inputLog{
+.inputLog {
     margin-top: 24px;
     font-size: 16px;
     padding: 10px 20px;
-    background-color:white ;
+    background-color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    color:black ;
+    color: black;
 }
 .inputLog:hover {
     opacity: 0.9;
 }
-.inputPas{
+.inputNam {
     margin-top: 24px;
     font-size: 16px;
     padding: 10px 20px;
-    background-color:white ;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: black;
+}
+.inputNam:hover {
+    opacity: 0.9;
+}
+.inputPas {
+    margin-top: 24px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -253,37 +266,43 @@ body {
 .inputPas:hover {
     opacity: 0.9;
 }
-.add-form-input {
+.add-form-input-log {
     display: flex;
-    justify-content: space-between
+    justify-content: space-between;
 }
-.add-form-button-main{
+.add-form-button-main {
     width: 250px;
     margin-left: 152px;
     margin-top: 24px;
     font-size: 16px;
     padding: 10px 20px;
-    background-color:white ;
+    background-color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    color: rgb(128 128 128);
+    color: black;
 }
 .add-form-button-main:hover {
     opacity: 0.9;
 }
 
-.add-form-button-link{
+.add-form-button-link {
     text-align: center;
     margin-top: 10px;
     font-size: 22px;
 }
 
-.link{
+.link {
     text-align: center;
     font-size: 20px;
     margin-top: 0px;
 }
 .link-login {
-    text-decoration: underline ;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.add-form-input-reg {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }

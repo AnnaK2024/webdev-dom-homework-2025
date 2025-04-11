@@ -1,11 +1,12 @@
 import { fetchAndRenderListComments } from '../index.js'
 import { login, setName, setToken } from './api.js'
+import { renderRegistration } from './renderRegistration.js'
 
 export const renderLogin = () => {
     const app = document.getElementById('app')
     const loginHTML = `
     <div class="add-form">
-        <div class="add-form-input">
+        <div class="add-form-input-log">
             <input
                 type="text"
                 id="login-input"
@@ -14,7 +15,7 @@ export const renderLogin = () => {
                 required
             />
             <input
-                type="text"
+                type="password"
                 id="password-input"
                 class="inputPas"
                 placeholder="Введите пароль"
@@ -27,6 +28,10 @@ export const renderLogin = () => {
     </div>
  `
     app.innerHTML = loginHTML
+
+    document.querySelector('.registry').addEventListener('click', () => {
+        renderRegistration()
+    })
 
     const loginEl = document.querySelector('#login-input')
     const passwordEl = document.querySelector('#password-input')
