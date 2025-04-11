@@ -80,6 +80,17 @@ export const postComment = (text, name) => {
         })
 }
 
+export function likesComment({ id }) {
+    return fetch(`${host + '/comments'}/${id}/toggle-like`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }).then((response) => {
+        return response.json()
+    })
+}
+
 export function deleteComment({ id }) {
     return fetch(`${host + '/comments'}/${id}`, {
         method: 'DELETE',
