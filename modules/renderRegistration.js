@@ -3,7 +3,7 @@ import { registration, setName, setToken } from './api.js'
 import { renderLogin } from './renderLogin.js'
 
 export const renderRegistration = () => {
-    const app = document.getElementById('app')
+    const container = document.querySelector('.container')
     const loginHTML = `
     <div class="add-form">
         <div class="add-form-input-reg">
@@ -34,7 +34,7 @@ export const renderRegistration = () => {
         <u class="add-form-button-link entry"> Войти </u>
     </div>
  `
-    app.innerHTML = loginHTML
+    container.innerHTML = loginHTML
 
     document.querySelector('.entry').addEventListener('click', () => {
         renderLogin()

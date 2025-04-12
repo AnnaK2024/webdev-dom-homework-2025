@@ -3,7 +3,7 @@ import { login, setName, setToken } from './api.js'
 import { renderRegistration } from './renderRegistration.js'
 
 export const renderLogin = () => {
-    const app = document.getElementById('app')
+    const container = document.querySelector('.container')
     const loginHTML = `
     <div class="add-form">
         <div class="add-form-input-log">
@@ -27,7 +27,7 @@ export const renderLogin = () => {
         <u class="add-form-button-link registry"> Зарегистрироваться </u>
     </div>
  `
-    app.innerHTML = loginHTML
+    container.innerHTML = loginHTML
 
     document.querySelector('.registry').addEventListener('click', () => {
         renderRegistration()

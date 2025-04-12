@@ -3,13 +3,15 @@ import { listСomments, updateListComments } from './listComments.js'
 import { sanitizeHtml, delay } from './helpFunctions.js'
 import { postComment } from './api.js'
 
-export const addButton = document.getElementById('add-button')
-export const inputName = document.getElementById('name')
-export const inputTextComment = document.getElementById('comment')
-
 //Добавляем новый комменатирй
 export const initAddCommentListener = (renderListСomments) => {
-    addButton.addEventListener('click', () => {
+    const addButton = document.getElementById('add-button')
+    const inputName = document.getElementById('name')
+    const inputTextComment = document.getElementById('comment')
+
+    addButton.addEventListener('click', (event) => {
+        event.stopImmediatePropagation()
+
         // Убираем ошибки из полей ввода
         inputName.classList.remove('error')
         inputTextComment.classList.remove('error')
@@ -95,6 +97,7 @@ export const initAddCommentListener = (renderListСomments) => {
 // Ответ на комментарий
 export const initClickComment = () => {
     const commentsElements = document.querySelectorAll('.comment')
+    const inputTextComment = document.getElementById('comment')
     for (const commentElement of commentsElements) {
         commentElement.addEventListener('click', () => {
             const currentComment = listСomments[commentElement.dataset.index]
@@ -126,8 +129,8 @@ export const initClickLike = (renderListСomments) => {
     }
 }
 
-// // удаляем комментарий
-// export const initDeleteComments = () => {
+// // // удаляем комментарий
+// export const initDeleteComments = (renderListComments) => {
 //     const deleteButton = document.getElementById('delete-button')
 
 //     for (const deleteEl of deleteButton) {
@@ -146,7 +149,8 @@ export const initClickLike = (renderListСomments) => {
 //                     deleteEl.disabled = false
 //                     deleteEl.textContent = 'Удалить комментарий'
 //                 })
+//             renderListComments()    
 //         })
 //     }
 // }
-// initDeleteComments()
+

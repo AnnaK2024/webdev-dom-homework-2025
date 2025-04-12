@@ -57,7 +57,7 @@ export const postComment = (text, name) => {
         body: JSON.stringify({
             text,
             name,
-            forceError: true,
+            forceError: false,
         }),
     })
         .then((response) => {
