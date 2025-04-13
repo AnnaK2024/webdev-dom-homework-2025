@@ -1,9 +1,9 @@
 import { name, token } from './api.js'
 import {
+    exitCurrentSession,
     initAddCommentListener,
     initClickComment,
     initClickLike,
-    // initDeleteComments,
 } from './initListeners.js'
 import { listСomments } from './listComments.js'
 import { renderLogin } from './renderLogin.js'
@@ -67,6 +67,11 @@ export const renderListСomments = () => {
                       class="delete-form-button"
                       > Удалить коментарий
                   </button>
+                  <button
+                      id="exit-button"
+                      class="exit-form-button"
+                      > Выйти
+                  </button>
               </div>
           </div>
           <div class="preloaderFooter hidden">
@@ -86,7 +91,7 @@ export const renderListСomments = () => {
         initClickLike(renderListСomments)
         initClickComment()
         initAddCommentListener(renderListСomments)
-        // initDeleteComments()
+        exitCurrentSession()
     } else {
         document.querySelector('.link-login').addEventListener('click', () => {
             renderLogin()

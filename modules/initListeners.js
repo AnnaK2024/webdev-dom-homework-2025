@@ -1,7 +1,9 @@
 import { renderListСomments } from './renderListComments.js'
 import { listСomments, updateListComments } from './listComments.js'
 import { sanitizeHtml, delay } from './helpFunctions.js'
-import { postComment } from './api.js'
+import { postComment, setName, setToken } from './api.js'
+import { renderLogin } from './renderLogin.js'
+import { fetchAndRenderListComments } from '../index.js'
 
 //Добавляем новый комменатирй
 export const initAddCommentListener = (renderListСomments) => {
@@ -131,26 +133,59 @@ export const initClickLike = (renderListСomments) => {
 
 // // // удаляем комментарий
 // export const initDeleteComments = (renderListComments) => {
-//     const deleteButton = document.getElementById('delete-button')
+//     const deleteButtons = document.querySelectorAll('.delete-button')
 
-//     for (const deleteEl of deleteButton) {
-//         deleteEl.addEventListener('click', (event) => {
+//     deleteButtons.forEach((deleteButton) => {
+//         deleteButton.addEventListener('click', (event) => {
 //             event.stopImmediatePropagation()
-//             const idDelete = deleteEl.dataset.id
 
-//             deleteEl.disabled = true
-//             deleteEl.textContent = 'Комментарий удаляется...'
+//             const idDelete = deleteButton.dataset.id
 
-//             deleteComment({ idDelete })
+//             deleteButton.disabled = true
+//             deleteButton.textContent = 'Комментарий удаляется...'
+
+//             deleteComment({ id: idDelete })
 //                 .then(() => {
-//                     return renderListСomments()
+//                     return renderListComments() // Обновить список комментариев
 //                 })
 //                 .then(() => {
-//                     deleteEl.disabled = false
-//                     deleteEl.textContent = 'Удалить комментарий'
+//                     deleteButton.disabled = false
+//                     deleteButton.textContent = 'Удалить комментарий'
 //                 })
-//             renderListComments()    
+//                 .catch((error) => {
+//                     console.error('Ошибка при удалении комментария:', error)
+//                     deleteButton.disabled = false
+//                     deleteButton.textContent = 'Удалить комментарий'
+//                 })
 //         })
-//     }
+//     })
 // }
 
+// Проверяем наличие токена при загрузке страницы
+window.addEventListener('load', () => {
+    const userToken = localStorage.getItem('userToken')
+    const userName = localStorage.getItem('userName')
+
+    if (userToken) {
+        // Устанавливаем токен и имя пользователя
+        setToken(userToken)
+        setName(userName)
+        // Загружаем комментарии или другую необходимую информацию
+        fetchAndRenderListComments()
+    }
+})
+
+export const exitCurrentSession = () => {
+    const buttonExit = document.querySelector('.exit-form-button')
+
+    buttonExit.addEventListener('click', () => {
+        // Удаляем токен и имя пользователя из локального хранилища
+        localStorage.removeItem('userToken')
+        localStorage.removeItem('userName')
+
+        // Сбрасываем токен и имя пользователя в приложении
+        setToken(null)
+        setName(null)
+        renderLogin()
+    })
+}

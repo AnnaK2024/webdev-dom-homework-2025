@@ -10,7 +10,7 @@ export const setToken = (newToken) => {
 
 export let name = ''
 export const setName = (newName) => {
-   name = newName
+    name = newName
 }
 
 export const fetchListComments = (attempt = 1) => {
@@ -91,16 +91,19 @@ export function likesComment({ id }) {
     })
 }
 
-export function deleteComment({ id }) {
-    return fetch(`${host + '/comments'}/${id}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    }).then((response) => {
-        return response.json()
-    })
-}
+// export function deleteComment({ id }) {
+//     return fetch(`${host + '/comments'}/${id}`, {
+//         method: 'DELETE',
+//         headers: {
+//             Authorization: `Bearer ${token}`,
+//         },
+//     }).then((response) => {
+//         if (!response.ok) {
+//             throw new Error('Сетевая ошибка: ответ не был успешным');
+//         }
+//         return response.json();
+//     });
+// }
 
 export const login = (login, password) => {
     return fetch(authHost + '/login', {

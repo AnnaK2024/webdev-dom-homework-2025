@@ -6,9 +6,7 @@ export const fetchAndRenderListComments = () => {
     fetchListComments().then((data) => {
         updateListComments(data)
         renderListСomments()
-        // hideLoader() // Скрываем лоадер после завершения загрузки
     })
 }
 
-// Запускаем загрузку комментариев
 fetchAndRenderListComments()
