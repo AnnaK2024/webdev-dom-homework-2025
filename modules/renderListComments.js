@@ -74,8 +74,8 @@ export const renderListСomments = () => {
                   </button>
               </div>
           </div>
-          <div class="preloaderFooter hidden">
-            <p class="loaderАdding"> Комментарий добавляется...... </p>
+          <div class="form-loading" style="display: none">
+            <p class="form-loadingText"> Комментарий добавляется...... </p>
           </div>
       </div>
     `

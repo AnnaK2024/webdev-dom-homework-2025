@@ -30,7 +30,7 @@ export const initAddCommentListener = (renderListСomments) => {
             return
         }
 
-        document.querySelector('.preloaderFooter').style.display = 'block'
+        document.querySelector('.form-loading').style.display = 'block'
         document.querySelector('.add-form').style.display = 'none'
 
         const maximumNumberAttempts = 3
@@ -74,7 +74,7 @@ export const initAddCommentListener = (renderListСomments) => {
                     }
                 })
                 .finally(() => {
-                    document.querySelector('.preloaderFooter').style.display =
+                    document.querySelector('.form-loading').style.display =
                         'none'
                     document.querySelector('.add-form').style.display = 'flex'
                 })

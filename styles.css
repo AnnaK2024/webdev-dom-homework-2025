@@ -110,6 +110,7 @@ body {
 .add-form-name {
     width: 300px;
     padding: 11px 22px;
+    background-color: #d9c5effa;
 }
 
 .add-form-text {
@@ -185,19 +186,7 @@ body {
     }
 }
 
-.loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    background: #202020;
-}
-
-.loader-text{
+.preloader{
     margin-top: 50px;
     color: #fff;
     font-family: Helvetica;
@@ -225,19 +214,19 @@ body {
     }
 }
 
-.preloaderFooter {
-    margin-top: 20px;
-    font-weight: bold;
-    display: inline-block;
-    font-size: 25px;
+.form-loadingText {
+    padding-left: 30px;
+    font-family: Helvetica;
+    font-size: 23px;
+    display:inline-block;
     clip-path: inset(0 3ch 0 0);
     animation: l 1s steps(4) infinite;
-}
-@keyframes l {
+  }
+  @keyframes l {
     to {
-        clip-path: inset(0 -1ch 0 0);
+      clip-path: inset(0 -1ch 0 0)
     }
-}
+  }
 
 .-error {
     border: 3px solid red;
