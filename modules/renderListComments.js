@@ -1,9 +1,11 @@
 import { name, token } from './api.js'
 import {
+    enteringTextPressingKey,
     exitCurrentSession,
     initAddCommentListener,
     initClickComment,
     initClickLike,
+    initDeleteComments,
 } from './initListeners.js'
 import { listСomments } from './listComments.js'
 import { renderLogin } from './renderLogin.js'
@@ -92,6 +94,8 @@ export const renderListСomments = () => {
         initClickComment()
         initAddCommentListener(renderListСomments)
         exitCurrentSession()
+        enteringTextPressingKey()
+        initDeleteComments()
     } else {
         document.querySelector('.link-login').addEventListener('click', () => {
             renderLogin()

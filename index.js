@@ -5,7 +5,7 @@ import { renderListСomments } from './modules/renderListComments.js'
 export const fetchAndRenderListComments = (isFirstLoading) => {
     if (isFirstLoading) {
         document.querySelector('.container').innerHTML =
-            `<p class="preloader" >Комментарии загружаются.....</p>`
+            `<p class="preloader" >Комментарии загружаются, подождите...</p>`
     }
     fetchListComments().then((data) => {
         updateListComments(data)

@@ -80,30 +80,78 @@ export const postComment = (text, name) => {
         })
 }
 
-export function likesComment({ id }) {
-    return fetch(`${host + '/comments'}/${id}/toggle-like`, {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    }).then((response) => {
-        return response.json()
-    })
+export const likesComment = async (id, attempt = 0) => {
+    try {
+        const response = await fetch(`${host}/comments/${id}/toggle-like`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        // Проверка статуса ответа
+        if (!response.ok) {
+            if (response.status === 500) {
+                throw new Error('Сервер упал')
+            }
+            throw new Error(`Ошибка: ${response.status}`)
+        }
+
+        // Возвращаем данные в формате JSON
+        return await response.json()
+    } catch (error) {
+        handleFetchError(error, attempt, id) // Обработка ошибок
+    }
 }
 
-// export function deleteComment({ id }) {
-//     return fetch(`${host + '/comments'}/${id}`, {
-//         method: 'DELETE',
-//         headers: {
-//             Authorization: `Bearer ${token}`,
-//         },
-//     }).then((response) => {
-//         if (!response.ok) {
-//             throw new Error('Сетевая ошибка: ответ не был успешным');
-//         }
-//         return response.json();
-//     });
-// }
+const handleFetchError = (error, attempt, id) => {
+    // Проверка на отсутствие соединения
+    if (error.message === 'Failed to fetch') {
+        alert('Нет интернета, попробуйте еще раз.')
+        if (attempt < 3) {
+            setTimeout(() => {
+                likesComment(id, attempt + 1) // Повторная попытка
+            }, 2000) // Задержка перед повторной попыткой
+        }
+    } else {
+        console.error('Произошла ошибка:', error.message) // Логирование других ошибок
+    }
+}
+
+export const deleteComment = async (id, attempt = 0) => {
+    try {
+        const response = await fetch(`${host}/comments/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        // Проверка статуса ответа
+        if (!response.ok) {
+            throw new Error('Сетевая ошибка: ответ не был успешным')
+        }
+
+        // Возвращаем данные в формате JSON
+        return await response.json()
+    } catch (error) {
+        handleDeleteError(error, attempt, id) // Обработка ошибок
+    }
+}
+
+const handleDeleteError = (error, attempt, id) => {
+    // Проверка на отсутствие соединения
+    if (error.message === 'Failed to fetch') {
+        alert('Нет интернета, попробуйте еще раз.')
+        if (attempt < 3) {
+            setTimeout(() => {
+                deleteComment(id, attempt + 1) // Повторная попытка
+            }, 2000) // Задержка перед повторной попыткой
+        }
+    } else {
+        console.error('Произошла ошибка:', error.message) // Логирование других ошибок
+    }
+}
 
 export const login = (login, password) => {
     return fetch(authHost + '/login', {
