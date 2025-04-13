@@ -1,4 +1,4 @@
-import { name, token } from './api.js'
+import { name, token } from './api'
 import {
     enteringTextPressingKey,
     exitCurrentSession,
@@ -7,8 +7,8 @@ import {
     initClickLike,
     initDeleteComments,
 } from './initListeners.js'
-import { listСomments } from './listComments.js'
-import { renderLogin } from './renderLogin.js'
+import { listСomments } from './listComments'
+import { renderLogin } from './renderLogin'
 
 // Функция рендеринга массива
 export const renderListСomments = () => {

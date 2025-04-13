@@ -1,6 +1,6 @@
-import { renderListСomments } from './renderListComments.js'
-import { updateListComments, listСomments } from './listComments.js'
-import { sanitizeHtml, delay } from './helpFunctions.js'
+import { renderListСomments } from './renderListComments'
+import { updateListComments, listСomments } from './listComments'
+import { sanitizeHtml, delay } from './helpFunctions'
 import {
     deleteComment,
     likesComment,

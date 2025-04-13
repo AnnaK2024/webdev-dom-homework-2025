@@ -1,4 +1,4 @@
-import { formatDate } from './helpFunctions.js'
+import { formatDate } from './helpFunctions'
 
 const host = 'https://wedev-api.sky.pro/api/v2/:anna-kalinina'
 const authHost = 'https://wedev-api.sky.pro/api/user'

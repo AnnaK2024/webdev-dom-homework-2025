@@ -4,7 +4,7 @@
   "description": "https://glebkaf.github.io/webdev-dom-homework/",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --mode development --watch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,8 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.5",
     "globals": "^16.0.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "webpack": "^5.99.5",
+    "webpack-cli": "^6.0.1"
   }
 }

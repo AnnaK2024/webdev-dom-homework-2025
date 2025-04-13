@@ -1,5 +1,5 @@
-import { fetchAndRenderListComments } from '../index.js'
-import { registration, setName, setToken } from './api.js'
+import { fetchAndRenderListComments } from '../index'
+import { registration, setName, setToken } from './api'
 import { renderLogin } from './renderLogin.js'
 
 export const renderRegistration = () => {
