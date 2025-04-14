@@ -1,6 +1,6 @@
 //Массив комментариев
-export let listСomments = []
+export let listComments = []
 
 export const updateListComments = (newListComments) => {
-    listСomments = newListComments
+    listComments = newListComments
 }

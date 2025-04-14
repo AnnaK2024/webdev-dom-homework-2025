@@ -1,5 +1,4 @@
-import { renderListСomments } from './renderListComments'
-import { updateListComments, listСomments } from './listComments'
+import { listComments, updateListComments } from './listComments'
 import { sanitizeHtml, delay } from './helpFunctions'
 import {
     deleteComment,
@@ -12,7 +11,7 @@ import { renderLogin } from './renderLogin.js'
 import { fetchAndRenderListComments } from '../index.js'
 
 //Добавляем новый комменатирй
-export const initAddCommentListener = (renderListСomments) => {
+export const initAddCommentListener = (renderListComments) => {
     const addButton = document.getElementById('add-button')
     const inputName = document.getElementById('name')
     const inputTextComment = document.getElementById('comment')
@@ -57,7 +56,7 @@ export const initAddCommentListener = (renderListСomments) => {
             )
                 .then((data) => {
                     updateListComments(data)
-                    renderListСomments()
+                    renderListComments()
                     inputName.value = ''
                     inputTextComment.value = ''
                 })
@@ -86,7 +85,6 @@ export const initAddCommentListener = (renderListСomments) => {
                 })
         }
 
-        // Начинаем отправку комментария
         handlePostClick()
     })
 }
@@ -108,18 +106,23 @@ export const enteringTextPressingKey = () => {
 export const initClickComment = () => {
     const commentsElements = document.querySelectorAll('.comment')
     const inputTextComment = document.getElementById('comment')
+
     for (const commentElement of commentsElements) {
         commentElement.addEventListener('click', () => {
-            const currentComment = listСomments[commentElement.dataset.index]
+            const index = commentElement.dataset.index
+            console.log(`Clicked comment index: ${index}`) // Проверяем индекс
+            const currentComment = listComments[index]
 
-            inputTextComment.value = `${currentComment.name} : ${currentComment.comment}`
-
-            renderListСomments()
+            if (currentComment) {
+                inputTextComment.value = `${currentComment.name} : ${currentComment.comment}`
+            } else {
+                console.warn(`No comment found at index ${index}`) // Если комментарий не найден
+            }
         })
     }
 }
 
-export const initClickLike = (renderListСomments) => {
+export const initClickLike = (renderListComments) => {
     const buttonLikes = document.querySelectorAll('.like-button')
     for (const buttonLike of buttonLikes) {
         buttonLike.addEventListener('click', (event) => {
@@ -147,12 +150,11 @@ export const initClickLike = (renderListСomments) => {
                 likeComment.isLiked = !likeComment.isLiked
                 likeComment.likes += likeComment.isLiked ? 1 : -1
 
-                console.log('ID комментария:', likeComment.id)
 
                 // Вызываем API для сохранения статуса лайка на сервере
                 likesComment(likeComment.id)
                     .then(() => {
-                        renderListСomments() // Обновляем отображение комментариев
+                        renderListComments() // Обновляем отображение комментариев
                     })
                     .catch((error) => {
                         console.error(
@@ -163,36 +165,6 @@ export const initClickLike = (renderListСomments) => {
             })
         })
     }
-}
-
-// // // удаляем комментарий
-export const initDeleteComments = (renderListComments) => {
-    const deleteButtons = document.querySelectorAll('.delete-button')
-
-    deleteButtons.forEach((deleteButton) => {
-        deleteButton.addEventListener('click', (event) => {
-            event.stopImmediatePropagation()
-
-            const idDelete = deleteButton.dataset.id
-
-            deleteButton.disabled = true
-            deleteButton.textContent = 'Комментарий удаляется...'
-
-            deleteComment({ id: idDelete })
-                .then(() => {
-                    return renderListComments() // Обновить список комментариев
-                })
-                .then(() => {
-                    deleteButton.disabled = false
-                    deleteButton.textContent = 'Удалить комментарий'
-                })
-                .catch((error) => {
-                    console.error('Ошибка при удалении комментария:', error)
-                    deleteButton.disabled = false
-                    deleteButton.textContent = 'Удалить комментарий'
-                })
-        })
-    })
 }
 
 // Проверяем наличие токена при загрузке страницы

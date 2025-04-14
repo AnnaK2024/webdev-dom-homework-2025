@@ -138,20 +138,6 @@ body {
     opacity: 0.9;
 }
 
-.delete-form-button {
-    margin-top: 24px;
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: #693d9bfa;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    color: #ffffff;
-}
-
-.delete-form-button:hover {
-    opacity: 0.9;
-}
 .exit-form-button {
     margin-left: 30px;
     margin-top: 24px;

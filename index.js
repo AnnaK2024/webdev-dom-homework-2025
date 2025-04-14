@@ -1,6 +1,6 @@
 import { fetchListComments } from './modules/api.js'
 import { updateListComments } from './modules/listComments.js'
-import { renderListСomments } from './modules/renderListComments.js'
+import { renderListComments } from './modules/renderListComments.js'
 
 export const fetchAndRenderListComments = (isFirstLoading) => {
     if (isFirstLoading) {
@@ -9,7 +9,7 @@ export const fetchAndRenderListComments = (isFirstLoading) => {
     }
     fetchListComments().then((data) => {
         updateListComments(data)
-        renderListСomments()
+        renderListComments()
     })
 }
 

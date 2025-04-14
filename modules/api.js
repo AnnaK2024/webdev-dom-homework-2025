@@ -24,6 +24,7 @@ export const fetchListComments = (attempt = 1) => {
         .then((responseData) => {
             const getComments = responseData.comments.map((comment) => {
                 return {
+                    id: comment.id,
                     name: comment.author.name,
                     date: formatDate(comment.date),
                     comment: comment.text,
@@ -37,10 +38,9 @@ export const fetchListComments = (attempt = 1) => {
             if (error.message === 'Failed to fetch') {
                 alert('Нет интернета, попробуйте еще раз.')
                 if (attempt < 3) {
-                    // ограничение на количество попыток
                     setTimeout(() => {
-                        fetchListComments(attempt + 1) // повторная попытка
-                    }, 2000) // задержка перед повторной попыткой
+                        fetchListComments(attempt + 1)
+                    }, 2000)
                 }
             } else {
                 console.error('Произошла ошибка:', error.message)
@@ -89,7 +89,6 @@ export const likesComment = async (id, attempt = 0) => {
             },
         })
 
-        // Проверка статуса ответа
         if (!response.ok) {
             if (response.status === 500) {
                 throw new Error('Сервер упал')
@@ -97,59 +96,22 @@ export const likesComment = async (id, attempt = 0) => {
             throw new Error(`Ошибка: ${response.status}`)
         }
 
-        // Возвращаем данные в формате JSON
         return await response.json()
     } catch (error) {
-        handleFetchError(error, attempt, id) // Обработка ошибок
+        handleFetchError(error, attempt, id)
     }
 }
 
 const handleFetchError = (error, attempt, id) => {
-    // Проверка на отсутствие соединения
     if (error.message === 'Failed to fetch') {
         alert('Нет интернета, попробуйте еще раз.')
         if (attempt < 3) {
             setTimeout(() => {
-                likesComment(id, attempt + 1) // Повторная попытка
-            }, 2000) // Задержка перед повторной попыткой
+                likesComment(id, attempt + 1)
+            }, 2000)
         }
     } else {
-        console.error('Произошла ошибка:', error.message) // Логирование других ошибок
-    }
-}
-
-export const deleteComment = async (id, attempt = 0) => {
-    try {
-        const response = await fetch(`${host}/comments/${id}`, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-
-        // Проверка статуса ответа
-        if (!response.ok) {
-            throw new Error('Сетевая ошибка: ответ не был успешным')
-        }
-
-        // Возвращаем данные в формате JSON
-        return await response.json()
-    } catch (error) {
-        handleDeleteError(error, attempt, id) // Обработка ошибок
-    }
-}
-
-const handleDeleteError = (error, attempt, id) => {
-    // Проверка на отсутствие соединения
-    if (error.message === 'Failed to fetch') {
-        alert('Нет интернета, попробуйте еще раз.')
-        if (attempt < 3) {
-            setTimeout(() => {
-                deleteComment(id, attempt + 1) // Повторная попытка
-            }, 2000) // Задержка перед повторной попыткой
-        }
-    } else {
-        console.error('Произошла ошибка:', error.message) // Логирование других ошибок
+        console.error('Произошла ошибка:', error.message)
     }
 }
 

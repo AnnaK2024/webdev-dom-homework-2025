@@ -5,16 +5,15 @@ import {
     initAddCommentListener,
     initClickComment,
     initClickLike,
-    initDeleteComments,
 } from './initListeners.js'
-import { listСomments } from './listComments'
+import { listComments } from './listComments'
 import { renderLogin } from './renderLogin'
 
 // Функция рендеринга массива
-export const renderListСomments = () => {
+export const renderListComments = () => {
     const container = document.querySelector('.container')
 
-    const listСommentsHtml = listСomments
+    const listCommentsHtml = listComments
         .map((comments, index) => {
             return `
         <li class="comment" data-index="${index}">
@@ -65,11 +64,6 @@ export const renderListСomments = () => {
               </div>
               <div class="add-form-row">
                   <button
-                      id="delete-button"
-                      class="delete-form-button"
-                      > Удалить коментарий
-                  </button>
-                  <button
                       id="exit-button"
                       class="exit-form-button"
                       > Выйти
@@ -84,18 +78,17 @@ export const renderListСomments = () => {
     const linkToLoginText = `<p class="link"> чтобы отправить комментарий, <span class= "link-login"> войдите </span> `
 
     const baseHtml = `
-      <ul class="comments"> ${listСommentsHtml}
+      <ul class="comments"> ${listCommentsHtml}
       ${token ? containerCommentsHtml : linkToLoginText} </ul>
     `
     container.innerHTML = baseHtml
 
     if (token) {
-        initClickLike(renderListСomments)
+        initClickLike(renderListComments)
         initClickComment()
-        initAddCommentListener(renderListСomments)
+        initAddCommentListener(renderListComments)
         exitCurrentSession()
         enteringTextPressingKey()
-        initDeleteComments()
     } else {
         document.querySelector('.link-login').addEventListener('click', () => {
             renderLogin()
