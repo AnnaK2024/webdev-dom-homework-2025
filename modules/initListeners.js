@@ -1,42 +1,99 @@
-import { renderListСomments } from './renderListComments.js'
-import { listСomments } from './listComments.js'
-import { formatDate, sanitizeHtml } from './helpFunctions.js'
-
-export const addButton = document.getElementById('add-button')
-export const inputName = document.getElementById('name')
-export const inputTextComment = document.getElementById('comment')
+import { listComments, updateListComments } from './listComments'
+import { sanitizeHtml, delay } from './helpFunctions'
+import {
+    deleteComment,
+    likesComment,
+    postComment,
+    setName,
+    setToken,
+} from './api.js'
+import { renderLogin } from './renderLogin.js'
+import { fetchAndRenderListComments } from '../index.js'
 
 //Добавляем новый комменатирй
-export const initAddCommentListener = () => {
-    addButton.addEventListener('click', () => {
+export const initAddCommentListener = (renderListComments) => {
+    const addButton = document.getElementById('add-button')
+    const inputName = document.getElementById('name')
+    const inputTextComment = document.getElementById('comment')
+
+    addButton.addEventListener('click', (event) => {
+        event.stopImmediatePropagation()
+
+        // Убираем ошибки из полей ввода
         inputName.classList.remove('error')
+        inputTextComment.classList.remove('error')
+
+        // Проверка имени
         if (inputName.value.trim() === '') {
             inputName.classList.add('error')
             return
         }
-        inputTextComment.classList.remove('error')
+
+        // Проверка текста комментария
         if (inputTextComment.value.trim() === '') {
             inputTextComment.classList.add('error')
             return
         }
 
-        const newComments = {
-            name: sanitizeHtml(inputName.value),
-            data: formatDate(),
-            comment: sanitizeHtml(inputTextComment.value),
-            likes: 0,
-            isLiked: false,
+        document.querySelector('.form-loading').style.display = 'block'
+        document.querySelector('.add-form').style.display = 'none'
+
+        const maximumNumberAttempts = 3
+
+        // Функция для отправки комментария с повторными попытками
+        const handlePostClick = (attempt = 0) => {
+            if (attempt >= maximumNumberAttempts) {
+                console.error(
+                    'Достигнуто максимальное количество попыток отправки комментария.',
+                )
+                alert('Не удалось отправить комментарий. Попробуйте позже.')
+                return
+            }
+
+            postComment(
+                sanitizeHtml(inputTextComment.value),
+                sanitizeHtml(inputName.value),
+            )
+                .then((data) => {
+                    updateListComments(data)
+                    renderListComments()
+                    inputName.value = ''
+                    inputTextComment.value = ''
+                })
+                .catch((error) => {
+                    if (error.message === 'Failed to fetch') {
+                        alert('Нет интернета, попробуйте еще раз.')
+                        handlePostClick(attempt + 1)
+                    } else if (error.message === 'Сервер упал') {
+                        alert('Ошибка сервера. Повторяем попытку...')
+                        handlePostClick(attempt + 1)
+                    } else if (error.message === 'Вы допустили ошибку') {
+                        alert('Вы ввели в одно из полей менее трех символов.')
+                        inputName.classList.add('error')
+                        inputTextComment.classList.add('error')
+
+                        setTimeout(() => {
+                            inputName.classList.remove('error')
+                            inputTextComment.classList.remove('error')
+                        }, 3000)
+                    }
+                })
+                .finally(() => {
+                    document.querySelector('.form-loading').style.display =
+                        'none'
+                    document.querySelector('.add-form').style.display = 'flex'
+                })
         }
 
-        listСomments.push(newComments)
-        renderListСomments()
-
-        inputName.value = ''
-        inputTextComment.value = ''
+        handlePostClick()
     })
 }
-// ввод комментария по нажатию на клавишу Enter
+
+// // ввод комментария по нажатию на клавишу Enter
 export const enteringTextPressingKey = () => {
+    const addButton = document.getElementById('add-button')
+    const inputTextComment = document.getElementById('comment')
+
     inputTextComment.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault() // Предотвращаем переход на новую строку
@@ -44,48 +101,97 @@ export const enteringTextPressingKey = () => {
         }
     })
 }
-enteringTextPressingKey()
 
 // Ответ на комментарий
 export const initClickComment = () => {
     const commentsElements = document.querySelectorAll('.comment')
+    const inputTextComment = document.getElementById('comment')
+
     for (const commentElement of commentsElements) {
         commentElement.addEventListener('click', () => {
-            const currentComment = listСomments[commentElement.dataset.index]
-            inputTextComment.value = `${currentComment.name} : ${currentComment.comment}`
+            const index = commentElement.dataset.index
+            console.log(`Clicked comment index: ${index}`) // Проверяем индекс
+            const currentComment = listComments[index]
 
-            renderListСomments()
+            if (currentComment) {
+                inputTextComment.value = `${currentComment.name} : ${currentComment.comment}`
+            } else {
+                console.warn(`No comment found at index ${index}`) // Если комментарий не найден
+            }
         })
     }
 }
 
-//Обработчик лайка
-export const initClickLike = () => {
+export const initClickLike = (renderListComments) => {
     const buttonLikes = document.querySelectorAll('.like-button')
     for (const buttonLike of buttonLikes) {
         buttonLike.addEventListener('click', (event) => {
             event.stopImmediatePropagation()
-            const likeIndex = buttonLike.dataset.indexLike // считываем значение дата-атрибута кнопки
-            const likeComment = listСomments[likeIndex] // перебираем индексы комментариев из списка
-            likeComment.isLiked = !likeComment.isLiked // цвет лайка
-            likeComment.likes += likeComment.isLiked ? 1 : -1 // количество лайков
 
-            renderListСomments()
+            buttonLike.classList.add('-loading-like')
+
+            delay(2000).then(() => {
+                const likeIndex = buttonLike.dataset.indexLike
+
+                // Проверка на валидность индекса
+                if (likeIndex <= 0 || likeIndex >= listComments.length) {
+                    console.error('Некорректный индекс лайка:', likeIndex)
+                    return
+                }
+
+                const likeComment = listComments[likeIndex]
+
+                // Проверка наличия id
+                if (!likeComment || !likeComment.hasOwnProperty('id')) {
+                    console.error('ID комментария отсутствует:', likeComment)
+                    return
+                }
+
+                likeComment.isLiked = !likeComment.isLiked
+                likeComment.likes += likeComment.isLiked ? 1 : -1
+
+
+                // Вызываем API для сохранения статуса лайка на сервере
+                likesComment(likeComment.id)
+                    .then(() => {
+                        renderListComments() // Обновляем отображение комментариев
+                    })
+                    .catch((error) => {
+                        console.error(
+                            'Ошибка при обновлении статуса лайка на сервере:',
+                            error,
+                        )
+                    })
+            })
         })
     }
 }
-// удаляем последний комментарий
-export const deleteLastComments = () => {
-    const deleteButton = document.getElementById('delete-button')
 
-    deleteButton.addEventListener('click', () => {
-        if (listСomments.length === 0) {
-            alert('Нет комментариев для удаления!')
-            return
-        }
-        const indexToDelete = listСomments.length - 1 // Индекс последнего комментария
-        listСomments.splice(indexToDelete, 1) // Удаляем комментарий по индексу
-        renderListСomments() // Обновляем отображение комментариев
+// Проверяем наличие токена при загрузке страницы
+window.addEventListener('load', () => {
+    const userToken = localStorage.getItem('userToken')
+    const userName = localStorage.getItem('userName')
+
+    if (userToken) {
+        // Устанавливаем токен и имя пользователя
+        setToken(userToken)
+        setName(userName)
+        // Загружаем комментарии или другую необходимую информацию
+        fetchAndRenderListComments()
+    }
+})
+
+export const exitCurrentSession = () => {
+    const buttonExit = document.querySelector('.exit-form-button')
+
+    buttonExit.addEventListener('click', () => {
+        // Удаляем токен и имя пользователя из локального хранилища
+        localStorage.removeItem('userToken')
+        localStorage.removeItem('userName')
+
+        // Сбрасываем токен и имя пользователя в приложении
+        setToken(null)
+        setName(null)
+        renderLogin()
     })
 }
-deleteLastComments()

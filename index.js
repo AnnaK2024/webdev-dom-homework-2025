@@ -1,5 +1,16 @@
-import { initAddCommentListener } from './modules/initlisteners.js'
-import { renderListСomments } from './modules/renderListComments.js'
+import { fetchListComments } from './modules/api.js'
+import { updateListComments } from './modules/listComments.js'
+import { renderListComments } from './modules/renderListComments.js'
 
-renderListСomments()
-initAddCommentListener()
+export const fetchAndRenderListComments = (isFirstLoading) => {
+    if (isFirstLoading) {
+        document.querySelector('.container').innerHTML =
+            `<p class="preloader" >Комментарии загружаются, подождите...</p>`
+    }
+    fetchListComments().then((data) => {
+        updateListComments(data)
+        renderListComments()
+    })
+}
+
+fetchAndRenderListComments(true)
